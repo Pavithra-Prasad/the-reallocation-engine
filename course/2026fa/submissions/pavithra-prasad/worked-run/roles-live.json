@@ -1,0 +1,46 @@
+[
+  {
+    "role_id": "pinterest-ugrad-2027",
+    "company": "Pinterest, Inc.",
+    "title": "University Grad Software Engineer 2027 (USA)",
+    "url": "https://www.pinterestcareers.com/jobs/?gh_jid=7838591",
+    "fit": 0.8,
+    "soc": "15-1252",
+    "greenhouse": {
+      "board": "pinterest",
+      "job_id": "7838591"
+    }
+  },
+  {
+    "role_id": "databricks-web-products",
+    "company": "Databricks, Inc.",
+    "title": "Software Engineer, Web Products (Mountain View)",
+    "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8635225002",
+    "fit": 0.7,
+    "soc": "15-1254",
+    "greenhouse": {
+      "board": "databricks",
+      "job_id": "8635225002"
+    }
+  },
+  {
+    "role_id": "pinterest-swe2-bigdata",
+    "company": "Pinterest, Inc.",
+    "title": "Software Engineer II, Big Data, tvScientific",
+    "url": "https://www.pinterestcareers.com/jobs/?gh_jid=7782546",
+    "fit": 0.6,
+    "soc": "15-1252",
+    "greenhouse": {
+      "board": "pinterest",
+      "job_id": "7782546"
+    }
+  },
+  {
+    "role_id": "dead-example",
+    "company": "Chime Financial Inc",
+    "title": "Deliberately dead URL (the repo's own example 404)",
+    "url": "https://boards.greenhouse.io/acmecorp/jobs/12345",
+    "fit": 0.8,
+    "soc": "15-1252"
+  }
+]

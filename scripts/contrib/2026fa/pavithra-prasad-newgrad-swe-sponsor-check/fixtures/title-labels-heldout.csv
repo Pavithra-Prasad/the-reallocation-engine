@@ -1,0 +1,31 @@
+set,title,new_grad_reachable,label_note
+heldout,Senior Full Stack Software Engineer,no,
+heldout,Software Application Developer,yes,
+heldout,Software Engineer (11525.2835),yes,
+heldout,Staff Software Quality Engineer,no,
+heldout,Software Engineer I - iOS,yes,
+heldout,Mobile Software Engineer,yes,
+heldout,Principal Software Test Engineer,no,
+heldout,SOFTWARE ENGINEER II,,labeler unsure (answered maybe); excluded from scoring
+heldout,High Performance Computing - Software Engineer,yes,
+heldout,"Prin Developer, IT",yes,kept 'yes'; 'Prin' may abbreviate Principal (senior); rule does not know the abbreviation; open question
+heldout,Database Developer,yes,
+heldout,SOFTWARE ENGINEER - INTEGRATION APPLICATIONS,yes,
+heldout,Sr. Principal Software Engineer [00052910],no,
+heldout,Software Engineer - Data & Machine Learning,yes,
+heldout,Senior Backend Developer,no,
+heldout,Software Development Engineer,yes,
+heldout,"SOFTWARE ENGINEER, BLOCKCHAIN CORE",yes,
+heldout,Senior Software Engineer - Backend (Mobile Team),no,"revised 2026-10-01: first label 'yes', labeler says misread; changed after seeing the rule disagree"
+heldout,Senior Software Development Engineer,no,
+heldout,System Software Engineer,yes,
+heldout,STAFF SOFTWARE ENGINEER - CLOUD/JAVA,no,
+heldout,"Senior Specialist, Back-End Developer",no,
+heldout,"Associate Manager, Software Engineer",,labeler unsure (answered maybe); excluded from scoring
+heldout,Software Quality Assurance Analyst and Tester,yes,"revised 2026-10-01: first label 'no', labeler says misread; changed after seeing the rule disagree"
+heldout,"Manager, Software Engineer",no,
+heldout,Software Engineer – T6,yes,
+heldout,Senior Software Engineer 1,no,
+heldout,"Staff Technical Writer, Developer Docs",no,
+heldout,Software Engineer - Backend,yes,
+heldout,PEGA DEVELOPER,yes,

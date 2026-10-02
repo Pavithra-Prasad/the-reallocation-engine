@@ -1,0 +1,134 @@
+[
+  {
+    "role_id": "pinterest-swe1",
+    "company": "Pinterest, Inc.",
+    "title": "Software Engineer I, Backend",
+    "sponsorship": {
+      "p": 0.9,
+      "tier": "Proven",
+      "source": "model-judgment"
+    },
+    "fit": {
+      "p": 0.75,
+      "source": "your-input"
+    },
+    "liveness": {
+      "factor": 1.0,
+      "source": "record"
+    },
+    "timeline": {
+      "factor": 1.0,
+      "source": "your-input"
+    }
+  },
+  {
+    "role_id": "chime-backend",
+    "company": "Chime Financial Inc",
+    "title": "Software Engineer, Backend (New Grad)",
+    "sponsorship": {
+      "p": 0.5,
+      "tier": "Possible",
+      "source": "model-judgment"
+    },
+    "fit": {
+      "p": 0.8,
+      "source": "your-input"
+    },
+    "liveness": {
+      "factor": 1.0,
+      "source": "record"
+    },
+    "timeline": {
+      "factor": 1.0,
+      "source": "your-input"
+    }
+  },
+  {
+    "role_id": "databricks-newgrad",
+    "company": "Databricks, Inc.",
+    "title": "Software Engineer, New Grad",
+    "sponsorship": {
+      "p": 0.9,
+      "tier": "Proven",
+      "source": "model-judgment"
+    },
+    "fit": {
+      "p": 0.7,
+      "source": "your-input"
+    },
+    "liveness": {
+      "factor": 0.0,
+      "source": "record"
+    },
+    "timeline": {
+      "factor": 1.0,
+      "source": "your-input"
+    }
+  },
+  {
+    "role_id": "smartsheet-swe",
+    "company": "Smartsheet Inc",
+    "title": "Software Engineer (starts after a long process)",
+    "sponsorship": {
+      "p": 0.9,
+      "tier": "Proven",
+      "source": "model-judgment"
+    },
+    "fit": {
+      "p": 0.7,
+      "source": "your-input"
+    },
+    "liveness": {
+      "factor": 1.0,
+      "source": "record"
+    },
+    "timeline": {
+      "factor": 0.0,
+      "source": "your-input"
+    }
+  },
+  {
+    "role_id": "airbnb-fullstack",
+    "company": "Airbnb, Inc.",
+    "title": "Full-Stack Software Engineer",
+    "sponsorship": {
+      "p": 0.9,
+      "tier": "Proven",
+      "source": "model-judgment"
+    },
+    "fit": {
+      "p": 0.6,
+      "source": "your-input"
+    },
+    "liveness": {
+      "factor": 1.0,
+      "source": "record"
+    },
+    "timeline": {
+      "factor": 1.0,
+      "source": "your-input"
+    }
+  },
+  {
+    "role_id": "uber-backend",
+    "company": "Uber Technologies Inc",
+    "title": "Backend Engineer, New Grad",
+    "sponsorship": {
+      "p": 0.9,
+      "tier": "Proven",
+      "source": "model-judgment"
+    },
+    "fit": {
+      "p": 0.7,
+      "source": "your-input"
+    },
+    "liveness": {
+      "factor": 1.0,
+      "source": "record"
+    },
+    "timeline": {
+      "factor": 1.0,
+      "source": "your-input"
+    }
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "_note": "Saved liveness results for the offline test. Invented, keyed by role_id; not a live check. A plain string means that result with no reason; an object carries the checker's reason.",
+  "pinterest-swe1": "active",
+  "chime-backend": "active",
+  "databricks-newgrad": {
+    "result": "expired",
+    "reason": "HTTP 404"
+  },
+  "alphabet-swe": "active",
+  "google-swe": "active",
+  "peloton-fullstack": "active",
+  "smartsheet-swe": {
+    "result": "active",
+    "reason": ""
+  },
+  "airbnb-fullstack": "active",
+  "uber-backend": "uncertain",
+  "twilio-conflict": "active"
+}

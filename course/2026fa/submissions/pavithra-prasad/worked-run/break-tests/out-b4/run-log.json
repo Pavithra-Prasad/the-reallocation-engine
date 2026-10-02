@@ -1,0 +1,85 @@
+{
+  "recipe": "pavithra-prasad-newgrad-swe-sponsor-check",
+  "recipe_version": "0.1.0",
+  "run_date": {
+    "value": "2026-10-01",
+    "source": "your-input"
+  },
+  "persona_file": "scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/persona.json",
+  "roles_file": "course/2026fa/submissions/pavithra-prasad/worked-run/break-tests/roles-typo.json",
+  "out_dir": "course/2026fa/submissions/pavithra-prasad/worked-run/break-tests/out-b4",
+  "data": {
+    "sponsorship": "data/80-days-to-stay/80-days-csv/mapped_student_employment_targets_v3.csv",
+    "form_d": "data/sec/form-d/processed/sample/companies-sec-*.sample.json",
+    "bls": "data/bls/compact/soc_occupation_compact.csv",
+    "scorer": "scripts/score/role-scorer.mjs"
+  },
+  "liveness_mode": "fixture:course/2026fa/submissions/pavithra-prasad/worked-run/break-tests/liveness-typo.json",
+  "opt_unemployment_deadline": {
+    "value": "2027-04-15",
+    "source": "your-input"
+  },
+  "counts": {
+    "input": 1,
+    "scored": 0,
+    "held": 1
+  },
+  "evaluated": [],
+  "held": [
+    {
+      "role_id": "typo",
+      "company": {
+        "value": "Pintrest Inc",
+        "source": "your-input"
+      },
+      "title": {
+        "value": "Software Engineer",
+        "source": "your-input"
+      },
+      "url": {
+        "value": "https://jobs.example.com/x",
+        "source": "your-input"
+      },
+      "sponsorship": {
+        "status": "missing-no-row",
+        "why": "no row in the sponsorship CSV after name normalisation; absence of a row is not evidence of non-sponsorship"
+      },
+      "funding_form_d": {
+        "value": null,
+        "source": "record",
+        "note": "not in the shipped Form D samples (50 companies per quarter); says nothing about real funding"
+      },
+      "wage_context": {
+        "soc_title": {
+          "value": "Software Developers",
+          "source": "record"
+        },
+        "national_annual_median_wage": {
+          "value": 133080.0,
+          "source": "record"
+        },
+        "oews_year": {
+          "value": "2024",
+          "source": "record"
+        }
+      },
+      "liveness": {
+        "value": "active",
+        "source": "record",
+        "note": "fixture:course/2026fa/submissions/pavithra-prasad/worked-run/break-tests/liveness-typo.json; no reason"
+      },
+      "greenhouse_api": {
+        "value": null,
+        "source": "record",
+        "note": "not checked (no greenhouse id in roles file, or request failed)"
+      },
+      "posting_level": {
+        "value": null,
+        "source": "model-judgment",
+        "note": "no posting text (no Greenhouse id, or API did not return 200)"
+      },
+      "held": "G-sponsorship: no row in the sponsorship CSV after name normalisation; absence of a row is not evidence of non-sponsorship",
+      "next_action": "manual lookup before any effort"
+    }
+  ]
+}

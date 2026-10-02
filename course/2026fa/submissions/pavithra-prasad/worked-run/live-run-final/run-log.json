@@ -1,0 +1,551 @@
+{
+  "recipe": "pavithra-prasad-newgrad-swe-sponsor-check",
+  "recipe_version": "0.1.0",
+  "run_date": {
+    "value": "2026-10-01",
+    "source": "your-input"
+  },
+  "persona_file": "scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/persona.json",
+  "roles_file": "course/2026fa/submissions/pavithra-prasad/worked-run/roles-live.json",
+  "out_dir": "course/2026fa/submissions/pavithra-prasad/worked-run/live-run-final",
+  "data": {
+    "sponsorship": "data/80-days-to-stay/80-days-csv/mapped_student_employment_targets_v3.csv",
+    "form_d": "data/sec/form-d/processed/sample/companies-sec-*.sample.json",
+    "bls": "data/bls/compact/soc_occupation_compact.csv",
+    "scorer": "scripts/score/role-scorer.mjs"
+  },
+  "liveness_mode": "live:scripts/ats/check-liveness.mjs",
+  "opt_unemployment_deadline": {
+    "value": "2027-04-15",
+    "source": "your-input"
+  },
+  "counts": {
+    "input": 4,
+    "scored": 4,
+    "held": 0
+  },
+  "evaluated": [
+    {
+      "role_id": "pinterest-ugrad-2027",
+      "company": {
+        "value": "Pinterest, Inc.",
+        "source": "your-input"
+      },
+      "title": {
+        "value": "University Grad Software Engineer 2027 (USA)",
+        "source": "your-input"
+      },
+      "url": {
+        "value": "https://www.pinterestcareers.com/jobs/?gh_jid=7838591",
+        "source": "your-input"
+      },
+      "sponsorship": {
+        "status": "ok",
+        "csv_name": {
+          "value": "PINTEREST INC",
+          "source": "record"
+        },
+        "location": {
+          "value": "SAN FRANCISCO, CA",
+          "source": "record"
+        },
+        "total_approvals": {
+          "value": 1364.0,
+          "source": "record"
+        },
+        "total_denials": {
+          "value": 16.0,
+          "source": "record"
+        },
+        "top_titles_sponsored": {
+          "value": [
+            "Software Engineer",
+            "Software Engineer II",
+            "Software Engineer I",
+            "Senior Software Engineer",
+            "Senior Data Analyst"
+          ],
+          "source": "record",
+          "note": "top five titles only; no per-title counts, no year"
+        },
+        "swe_titles": {
+          "value": [
+            "Software Engineer",
+            "Software Engineer II",
+            "Software Engineer I",
+            "Senior Software Engineer"
+          ],
+          "source": "model-judgment",
+          "note": "keyword rule SWE_RE"
+        },
+        "entry_level_swe_titles": {
+          "value": [
+            "Software Engineer",
+            "Software Engineer II",
+            "Software Engineer I"
+          ],
+          "source": "model-judgment",
+          "note": "keyword rule SENIOR_RE"
+        },
+        "evidence_class": {
+          "value": "entry-level-swe",
+          "source": "model-judgment"
+        },
+        "h1b_median_salary_offered": {
+          "value": 156853.0,
+          "source": "record"
+        }
+      },
+      "funding_form_d": {
+        "value": null,
+        "source": "record",
+        "note": "not in the shipped Form D samples (50 companies per quarter); says nothing about real funding"
+      },
+      "wage_context": {
+        "soc_title": {
+          "value": "Software Developers",
+          "source": "record"
+        },
+        "national_annual_median_wage": {
+          "value": 133080.0,
+          "source": "record"
+        },
+        "oews_year": {
+          "value": "2024",
+          "source": "record"
+        }
+      },
+      "liveness": {
+        "value": "active",
+        "source": "record",
+        "note": "live:scripts/ats/check-liveness.mjs; checker said expired from a content heuristic (insufficient content \u2014 likely nav/footer only), not an HTTP 404/410; Greenhouse API HTTP 200"
+      },
+      "greenhouse_api": {
+        "value": 200,
+        "source": "record",
+        "note": "live: boards-api.greenhouse.io"
+      },
+      "posting_level": {
+        "value": "entry",
+        "source": "model-judgment",
+        "note": "posting says 'university grad'"
+      },
+      "timeline": {
+        "value": 1.0,
+        "source": "your-input",
+        "note": "start \u2248 max(run 2026-10-01 + lag 60d, EAD 2027-01-15) = 2027-01-15; deadline 2027-04-15; buffer 20d \u2192 fits"
+      },
+      "fit": {
+        "value": 0.8,
+        "source": "your-input",
+        "note": "self-rated by the student; no model was called"
+      },
+      "sponsorship_term": {
+        "value": {
+          "p": 0.9,
+          "tier": "Proven"
+        },
+        "source": "model-judgment",
+        "note": "rule SPONSOR_MAP applied to the record"
+      },
+      "scorer": {
+        "recommendation": "Apply",
+        "composite": 0.555,
+        "reason": "composite 0.555 \u2265 0.3, gates healthy",
+        "arithmetic": "(0.9\u00b70.35 + 0.8\u00b70.3) \u00d7 1 \u00d7 1 = 0.555"
+      },
+      "next_action": "tailor application"
+    },
+    {
+      "role_id": "databricks-web-products",
+      "company": {
+        "value": "Databricks, Inc.",
+        "source": "your-input"
+      },
+      "title": {
+        "value": "Software Engineer, Web Products (Mountain View)",
+        "source": "your-input"
+      },
+      "url": {
+        "value": "https://databricks.com/company/careers/open-positions/job?gh_jid=8635225002",
+        "source": "your-input"
+      },
+      "sponsorship": {
+        "status": "ok",
+        "csv_name": {
+          "value": "DATABRICKS INC",
+          "source": "record"
+        },
+        "location": {
+          "value": "SAN FRANCISCO, CA",
+          "source": "record"
+        },
+        "total_approvals": {
+          "value": 1640.0,
+          "source": "record"
+        },
+        "total_denials": {
+          "value": 8.0,
+          "source": "record"
+        },
+        "top_titles_sponsored": {
+          "value": [
+            "Software Engineer",
+            "Senior Software Engineer",
+            "Solutions Architect",
+            "Specialist Solutions Architect",
+            "Senior Solutions Engineer"
+          ],
+          "source": "record",
+          "note": "top five titles only; no per-title counts, no year"
+        },
+        "swe_titles": {
+          "value": [
+            "Software Engineer",
+            "Senior Software Engineer"
+          ],
+          "source": "model-judgment",
+          "note": "keyword rule SWE_RE"
+        },
+        "entry_level_swe_titles": {
+          "value": [
+            "Software Engineer"
+          ],
+          "source": "model-judgment",
+          "note": "keyword rule SENIOR_RE"
+        },
+        "evidence_class": {
+          "value": "entry-level-swe",
+          "source": "model-judgment"
+        },
+        "h1b_median_salary_offered": {
+          "value": 149422.5,
+          "source": "record"
+        }
+      },
+      "funding_form_d": {
+        "value": [
+          {
+            "name": "Databricks, Inc.",
+            "date_filed": "31-DEC-2025",
+            "total_amount_sold": 4082050250.0,
+            "file": "data/sec/form-d/processed/sample/companies-sec-2025q4-d.sample.json"
+          },
+          {
+            "name": "Databricks, Inc.",
+            "date_filed": "31-DEC-2025",
+            "total_amount_sold": 23017200.0,
+            "file": "data/sec/form-d/processed/sample/companies-sec-2025q4-d.sample.json"
+          }
+        ],
+        "source": "record"
+      },
+      "wage_context": {
+        "soc_title": {
+          "value": "Web Developers",
+          "source": "record"
+        },
+        "national_annual_median_wage": {
+          "value": 90930.0,
+          "source": "record"
+        },
+        "oews_year": {
+          "value": "2024",
+          "source": "record"
+        }
+      },
+      "liveness": {
+        "value": "active",
+        "source": "record",
+        "note": "live:scripts/ats/check-liveness.mjs; active; Greenhouse API HTTP 200 agrees"
+      },
+      "greenhouse_api": {
+        "value": 200,
+        "source": "record",
+        "note": "live: boards-api.greenhouse.io"
+      },
+      "posting_level": {
+        "value": "mid",
+        "source": "model-judgment",
+        "note": "posting asks 4+ years of experience"
+      },
+      "timeline": {
+        "value": 1.0,
+        "source": "your-input",
+        "note": "start \u2248 max(run 2026-10-01 + lag 60d, EAD 2027-01-15) = 2027-01-15; deadline 2027-04-15; buffer 20d \u2192 fits"
+      },
+      "fit": {
+        "value": 0.7,
+        "source": "your-input",
+        "note": "self-rated by the student; no model was called"
+      },
+      "sponsorship_term": {
+        "value": {
+          "p": 0.9,
+          "tier": "Proven"
+        },
+        "source": "model-judgment",
+        "note": "rule SPONSOR_MAP applied to the record"
+      },
+      "scorer": {
+        "recommendation": "Apply",
+        "composite": 0.525,
+        "reason": "composite 0.525 \u2265 0.3, gates healthy",
+        "arithmetic": "(0.9\u00b70.35 + 0.7\u00b70.3) \u00d7 1 \u00d7 1 = 0.525"
+      },
+      "next_action": "check first: the posting asks for more experience than a new grad has; tailor only if you meet it"
+    },
+    {
+      "role_id": "pinterest-swe2-bigdata",
+      "company": {
+        "value": "Pinterest, Inc.",
+        "source": "your-input"
+      },
+      "title": {
+        "value": "Software Engineer II, Big Data, tvScientific",
+        "source": "your-input"
+      },
+      "url": {
+        "value": "https://www.pinterestcareers.com/jobs/?gh_jid=7782546",
+        "source": "your-input"
+      },
+      "sponsorship": {
+        "status": "ok",
+        "csv_name": {
+          "value": "PINTEREST INC",
+          "source": "record"
+        },
+        "location": {
+          "value": "SAN FRANCISCO, CA",
+          "source": "record"
+        },
+        "total_approvals": {
+          "value": 1364.0,
+          "source": "record"
+        },
+        "total_denials": {
+          "value": 16.0,
+          "source": "record"
+        },
+        "top_titles_sponsored": {
+          "value": [
+            "Software Engineer",
+            "Software Engineer II",
+            "Software Engineer I",
+            "Senior Software Engineer",
+            "Senior Data Analyst"
+          ],
+          "source": "record",
+          "note": "top five titles only; no per-title counts, no year"
+        },
+        "swe_titles": {
+          "value": [
+            "Software Engineer",
+            "Software Engineer II",
+            "Software Engineer I",
+            "Senior Software Engineer"
+          ],
+          "source": "model-judgment",
+          "note": "keyword rule SWE_RE"
+        },
+        "entry_level_swe_titles": {
+          "value": [
+            "Software Engineer",
+            "Software Engineer II",
+            "Software Engineer I"
+          ],
+          "source": "model-judgment",
+          "note": "keyword rule SENIOR_RE"
+        },
+        "evidence_class": {
+          "value": "entry-level-swe",
+          "source": "model-judgment"
+        },
+        "h1b_median_salary_offered": {
+          "value": 156853.0,
+          "source": "record"
+        }
+      },
+      "funding_form_d": {
+        "value": null,
+        "source": "record",
+        "note": "not in the shipped Form D samples (50 companies per quarter); says nothing about real funding"
+      },
+      "wage_context": {
+        "soc_title": {
+          "value": "Software Developers",
+          "source": "record"
+        },
+        "national_annual_median_wage": {
+          "value": 133080.0,
+          "source": "record"
+        },
+        "oews_year": {
+          "value": "2024",
+          "source": "record"
+        }
+      },
+      "liveness": {
+        "value": "active",
+        "source": "record",
+        "note": "live:scripts/ats/check-liveness.mjs; checker said expired from a content heuristic (insufficient content \u2014 likely nav/footer only), not an HTTP 404/410; Greenhouse API HTTP 200"
+      },
+      "greenhouse_api": {
+        "value": 200,
+        "source": "record",
+        "note": "live: boards-api.greenhouse.io"
+      },
+      "posting_level": {
+        "value": "unclear",
+        "source": "model-judgment",
+        "note": "no new-grad phrase and no 'N years experience' found"
+      },
+      "timeline": {
+        "value": 1.0,
+        "source": "your-input",
+        "note": "start \u2248 max(run 2026-10-01 + lag 60d, EAD 2027-01-15) = 2027-01-15; deadline 2027-04-15; buffer 20d \u2192 fits"
+      },
+      "fit": {
+        "value": 0.6,
+        "source": "your-input",
+        "note": "self-rated by the student; no model was called"
+      },
+      "sponsorship_term": {
+        "value": {
+          "p": 0.9,
+          "tier": "Proven"
+        },
+        "source": "model-judgment",
+        "note": "rule SPONSOR_MAP applied to the record"
+      },
+      "scorer": {
+        "recommendation": "Apply",
+        "composite": 0.495,
+        "reason": "composite 0.495 \u2265 0.3, gates healthy",
+        "arithmetic": "(0.9\u00b70.35 + 0.6\u00b70.3) \u00d7 1 \u00d7 1 = 0.495"
+      },
+      "next_action": "tailor application, after reading the posting's experience requirement (the rule could not find one)"
+    },
+    {
+      "role_id": "dead-example",
+      "company": {
+        "value": "Chime Financial Inc",
+        "source": "your-input"
+      },
+      "title": {
+        "value": "Deliberately dead URL (the repo's own example 404)",
+        "source": "your-input"
+      },
+      "url": {
+        "value": "https://boards.greenhouse.io/acmecorp/jobs/12345",
+        "source": "your-input"
+      },
+      "sponsorship": {
+        "status": "ok",
+        "csv_name": {
+          "value": "CHIME FINANCIAL INC",
+          "source": "record"
+        },
+        "location": {
+          "value": "SAN FRANCISCO, CA",
+          "source": "record"
+        },
+        "total_approvals": {
+          "value": 580.0,
+          "source": "record"
+        },
+        "total_denials": {
+          "value": 2.0,
+          "source": "record"
+        },
+        "top_titles_sponsored": {
+          "value": [
+            "Senior Software Engineer"
+          ],
+          "source": "record",
+          "note": "top five titles only; no per-title counts, no year"
+        },
+        "swe_titles": {
+          "value": [
+            "Senior Software Engineer"
+          ],
+          "source": "model-judgment",
+          "note": "keyword rule SWE_RE"
+        },
+        "entry_level_swe_titles": {
+          "value": [],
+          "source": "model-judgment",
+          "note": "keyword rule SENIOR_RE"
+        },
+        "evidence_class": {
+          "value": "senior-only-swe",
+          "source": "model-judgment"
+        },
+        "h1b_median_salary_offered": {
+          "value": 240108.0,
+          "source": "record"
+        }
+      },
+      "funding_form_d": {
+        "value": null,
+        "source": "record",
+        "note": "not in the shipped Form D samples (50 companies per quarter); says nothing about real funding"
+      },
+      "wage_context": {
+        "soc_title": {
+          "value": "Software Developers",
+          "source": "record"
+        },
+        "national_annual_median_wage": {
+          "value": 133080.0,
+          "source": "record"
+        },
+        "oews_year": {
+          "value": "2024",
+          "source": "record"
+        }
+      },
+      "liveness": {
+        "value": "expired",
+        "source": "record",
+        "note": "live:scripts/ats/check-liveness.mjs; HTTP 404"
+      },
+      "greenhouse_api": {
+        "value": null,
+        "source": "record",
+        "note": "not checked (no greenhouse id in roles file, or request failed)"
+      },
+      "posting_level": {
+        "value": null,
+        "source": "model-judgment",
+        "note": "no posting text (no Greenhouse id, or API did not return 200)"
+      },
+      "timeline": {
+        "value": 1.0,
+        "source": "your-input",
+        "note": "start \u2248 max(run 2026-10-01 + lag 60d, EAD 2027-01-15) = 2027-01-15; deadline 2027-04-15; buffer 20d \u2192 fits"
+      },
+      "fit": {
+        "value": 0.8,
+        "source": "your-input",
+        "note": "self-rated by the student; no model was called"
+      },
+      "sponsorship_term": {
+        "value": {
+          "p": 0.5,
+          "tier": "Possible"
+        },
+        "source": "model-judgment",
+        "note": "rule SPONSOR_MAP applied to the record"
+      },
+      "scorer": {
+        "recommendation": "Skip",
+        "composite": 0,
+        "reason": "gated: liveness \u2248 0.000 (a closed gate zeroes the composite regardless of votes)",
+        "arithmetic": "(0.5\u00b70.35 + 0.8\u00b70.3) \u00d7 0 \u00d7 1 = 0.000"
+      },
+      "next_action": "skip"
+    }
+  ],
+  "held": []
+}

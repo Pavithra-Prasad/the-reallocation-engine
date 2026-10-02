@@ -1,0 +1,6 @@
+✓ 4 roles → Apply 1 · Consider 0 · Skip 1 · Held 2
+  Apply     Databricks, Inc.             tailor application
+  Skip      Chime Financial Inc          skip
+  HELD      Pinterest, Inc.              G1 liveness: uncertain (checker said expired from a content heuristic (insufficient content — likely nav/footer only), not an HTTP 404/410); a human must open the posting
+  HELD      Pinterest, Inc.              G1 liveness: uncertain (checker said expired from a content heuristic (insufficient content — likely nav/footer only), not an HTTP 404/410); a human must open the posting
+  outputs: course/2026fa/submissions/pavithra-prasad/worked-run/live-run-2/{run-log.json, report.md, roles.json, role-scores.json, role-scores.md}

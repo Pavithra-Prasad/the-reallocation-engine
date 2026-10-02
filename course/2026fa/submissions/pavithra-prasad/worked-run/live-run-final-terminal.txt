@@ -1,0 +1,8 @@
+$ python3 scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/sponsor_check.py --persona scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/persona.json --roles course/2026fa/submissions/pavithra-prasad/worked-run/roles-live.json --out-dir course/2026fa/submissions/pavithra-prasad/worked-run/live-run-final
+✓ 4 roles → Apply 3 · Consider 0 · Skip 1 · Held 0
+  Apply     Pinterest, Inc.              tailor application
+  Apply     Databricks, Inc.             check first: the posting asks for more experience than a new grad has; tailor only if you meet it
+  Apply     Pinterest, Inc.              tailor application, after reading the posting's experience requirement (the rule could not find one)
+  Skip      Chime Financial Inc          skip
+  outputs: course/2026fa/submissions/pavithra-prasad/worked-run/live-run-final/{run-log.json, report.md, roles.json, role-scores.json, role-scores.md}
+exit 0

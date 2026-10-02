@@ -1,0 +1,6 @@
+✓ 4 roles → Apply 1 · Consider 0 · Skip 3 · Held 0
+  Skip      Pinterest, Inc.              network, don't apply: strong new-grad sponsor but posting closed
+  Apply     Databricks, Inc.             tailor application
+  Skip      Pinterest, Inc.              network, don't apply: strong new-grad sponsor but posting closed
+  Skip      Chime Financial Inc          skip
+  outputs: course/2026fa/submissions/pavithra-prasad/worked-run/live-run/{run-log.json, report.md, roles.json, role-scores.json, role-scores.md}

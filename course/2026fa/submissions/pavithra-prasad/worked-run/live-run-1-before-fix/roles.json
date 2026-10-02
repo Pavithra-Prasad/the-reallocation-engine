@@ -1,0 +1,90 @@
+[
+  {
+    "role_id": "pinterest-ugrad-2027",
+    "company": "Pinterest, Inc.",
+    "title": "University Grad Software Engineer 2027 (USA)",
+    "sponsorship": {
+      "p": 0.9,
+      "tier": "Proven",
+      "source": "model-judgment"
+    },
+    "fit": {
+      "p": 0.8,
+      "source": "your-input"
+    },
+    "liveness": {
+      "factor": 0.0,
+      "source": "record"
+    },
+    "timeline": {
+      "factor": 1.0,
+      "source": "your-input"
+    }
+  },
+  {
+    "role_id": "databricks-web-products",
+    "company": "Databricks, Inc.",
+    "title": "Software Engineer, Web Products (Mountain View)",
+    "sponsorship": {
+      "p": 0.9,
+      "tier": "Proven",
+      "source": "model-judgment"
+    },
+    "fit": {
+      "p": 0.7,
+      "source": "your-input"
+    },
+    "liveness": {
+      "factor": 1.0,
+      "source": "record"
+    },
+    "timeline": {
+      "factor": 1.0,
+      "source": "your-input"
+    }
+  },
+  {
+    "role_id": "pinterest-swe2-bigdata",
+    "company": "Pinterest, Inc.",
+    "title": "Software Engineer II, Big Data, tvScientific",
+    "sponsorship": {
+      "p": 0.9,
+      "tier": "Proven",
+      "source": "model-judgment"
+    },
+    "fit": {
+      "p": 0.6,
+      "source": "your-input"
+    },
+    "liveness": {
+      "factor": 0.0,
+      "source": "record"
+    },
+    "timeline": {
+      "factor": 1.0,
+      "source": "your-input"
+    }
+  },
+  {
+    "role_id": "dead-example",
+    "company": "Chime Financial Inc",
+    "title": "Deliberately dead URL (the repo's own example 404)",
+    "sponsorship": {
+      "p": 0.5,
+      "tier": "Possible",
+      "source": "model-judgment"
+    },
+    "fit": {
+      "p": 0.8,
+      "source": "your-input"
+    },
+    "liveness": {
+      "factor": 0.0,
+      "source": "record"
+    },
+    "timeline": {
+      "factor": 1.0,
+      "source": "your-input"
+    }
+  }
+]

@@ -1,0 +1,111 @@
+[
+  {
+    "role_id": "pinterest-swe1",
+    "company": "Pinterest, Inc.",
+    "title": "Software Engineer I, Backend",
+    "url": "https://jobs.example.com/pinterest/swe1",
+    "fit": 0.75,
+    "soc": "15-1252",
+    "greenhouse": {
+      "board": "pinterest",
+      "job_id": "9000001"
+    }
+  },
+  {
+    "role_id": "chime-backend",
+    "company": "Chime Financial Inc",
+    "title": "Software Engineer, Backend (New Grad)",
+    "url": "https://jobs.example.com/chime/backend",
+    "fit": 0.8,
+    "soc": "15-1252",
+    "greenhouse": {
+      "board": "chime",
+      "job_id": "9000005"
+    }
+  },
+  {
+    "role_id": "databricks-newgrad",
+    "company": "Databricks, Inc.",
+    "title": "Software Engineer, New Grad",
+    "url": "https://jobs.example.com/databricks/newgrad",
+    "fit": 0.7,
+    "soc": "15-1252",
+    "greenhouse": {
+      "board": "databricks",
+      "job_id": "9000007"
+    }
+  },
+  {
+    "role_id": "alphabet-swe",
+    "company": "Alphabet Inc",
+    "title": "Software Engineer, Early Career",
+    "url": "https://jobs.example.com/alphabet/swe",
+    "fit": 0.7,
+    "soc": "15-1252"
+  },
+  {
+    "role_id": "google-swe",
+    "company": "Google LLC",
+    "title": "Software Engineer, University Grad",
+    "url": "https://jobs.example.com/google/swe",
+    "fit": 0.7,
+    "soc": "15-1252"
+  },
+  {
+    "role_id": "peloton-fullstack",
+    "company": "Peloton Interactive",
+    "title": "Full-Stack Engineer",
+    "url": "https://jobs.example.com/peloton/fullstack",
+    "fit": 0.65,
+    "soc": "15-1254"
+  },
+  {
+    "role_id": "smartsheet-swe",
+    "company": "Smartsheet Inc",
+    "title": "Software Engineer (starts after a long process)",
+    "url": "https://jobs.example.com/smartsheet/swe",
+    "fit": 0.7,
+    "soc": "15-1252",
+    "hiring_lag_days": 210,
+    "greenhouse": {
+      "board": "smartsheet",
+      "job_id": "9000006"
+    }
+  },
+  {
+    "role_id": "airbnb-fullstack",
+    "company": "Airbnb, Inc.",
+    "title": "Full-Stack Software Engineer",
+    "url": "https://jobs.example.com/airbnb/fullstack",
+    "fit": 0.6,
+    "soc": "15-9999",
+    "greenhouse": {
+      "board": "airbnb",
+      "job_id": "9000003"
+    }
+  },
+  {
+    "role_id": "uber-backend",
+    "company": "Uber Technologies Inc",
+    "title": "Backend Engineer, New Grad",
+    "url": "https://jobs.example.com/uber/backend",
+    "fit": 0.7,
+    "soc": "15-1252",
+    "greenhouse": {
+      "board": "uber",
+      "job_id": "9000002"
+    }
+  },
+  {
+    "role_id": "twilio-conflict",
+    "company": "Twilio Inc",
+    "title": "Software Engineer (L2)",
+    "url": "https://jobs.example.com/twilio/l2",
+    "fit": 0.7,
+    "soc": "15-1252",
+    "greenhouse": {
+      "board": "twilio",
+      "job_id": "9000004"
+    }
+  }
+]

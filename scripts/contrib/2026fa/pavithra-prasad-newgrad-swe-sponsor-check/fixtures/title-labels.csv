@@ -1,0 +1,53 @@
+set,title,new_grad_reachable,label_note
+random,Senior Software and Algorithms Engineer,no,
+random,Senior Software Quality Assurance Manager,no,
+random,Lead Software Development Engineer in Test,no,
+random,Sr. Software Development Engineer in Test,no,
+random,Software Engineer (11525.3365),yes,number is an internal job code not a level
+random,Software Engineer 2,yes,level 2 is mid; reachable 0-2 yrs
+random,"Software Engineer, Java",yes,
+random,Senior Streaming Software Engineer,no,
+random,Software Developer (Data Scientist),yes,
+random,Sr. Software Test Development Engineer,no,
+random,Full Stack Software Engineer (Software Developer),yes,
+random,Software QA Engineer,yes,
+random,UI Developer,yes,
+random,Lead Audio Software Engineer,no,
+random,Software Engineer II,yes,same level as 'Software Engineer 2'
+random,Senior Machine Learning Software Engineer,no,
+random,SENIOR SOFTWARE ENGINEER II,no,
+random,Senior Embedded Software Engineer,no,
+random,Senior Software Engineer II,no,
+random,"Software Engineer, Senior",no,
+random,Software Development Engineer Lead,no,
+random,"Sr. Software Engineer, DevOps",no,
+random,Sr. Software Engineer – Wordpress Lifecycle Management,no,
+random,Lead Full Stack Engineer,no,
+random,Software Engineer - Machine Vision,yes,
+random,Software Engineer I,yes,
+random,Sr. Principal Software Engineer,no,
+random,Full-Stack Engineer,yes,
+random,"Principal, Full-Stack Developer",no,
+random,Senior Software Engineer - Mobile,no,
+random,Application software developer,yes,
+random,"MTS, Software Applications Engineer",yes,MTS = Member of Technical Staff; often entry or mid
+random,Software Developer Manager,no,
+random,Software Engineer Senior Staff,no,
+random,Senior Software Engineer – Front End,no,
+random,Automation Developer,yes,
+random,"Senior Software Engineer, TPLAN",no,
+random,"Software Engineer, Backend, Cloud Platform",yes,
+random,Software Engineer (11525.3338.7),yes,number is an internal job code not a level
+random,"Senior Software Architect, Insights & Visualizations",no,
+edge,Member of Technical Staff,yes,'Staff' here is not a seniority level
+edge,"Member of Technical Staff, Software Engineering",yes,
+edge,Software Engineer III,no,
+edge,Software Engineer 3,no,
+edge,Staff Software Engineer,no,
+edge,SDE I,yes,
+edge,Software Development Engineer II,yes,
+edge,Associate Software Engineer,yes,
+edge,"Software Engineer, New Grad",yes,
+edge,Software Engineer (L3),yes,L3 is an entry/mid band at most companies that use L-levels
+edge,Software Engineer (L5),no,L5 is usually senior
+edge,Engineering Manager,no,not an IC role; SWE_RE does not match it anyway
