@@ -16,7 +16,7 @@ This is the honest record of building the new-grad software-engineer sponsor che
 | 2 | `npm run ats:scan -- --dry-run` | a scan | `portals.yml not found`; worked with `REALLOCATION_ENGINE_PORTALS=data/ats/portals.example.yml` | AI |
 | 3 | `npm install` | no repo changes | modified tracked `package-lock.json`; reverted so it stays out of the PR | AI |
 | 4 | I ran `sponsor_check.py --sample` myself | output | `[Errno 2] No such file or directory`; I was inside `course/…/pavithra-prasad`. Worked after `cd` to repo root | me |
-| 5 | Same run on my Python 3.13 (the AI used 3.9.6) | same result | same result, 17/17 tests passed (25/25 later) | me |
+| 5 | Same run on my Python 3.13 (the AI used 3.9.6) | same result | same result, 17/17 tests passed; reran the final 25-test version on 3.13 on 2026-10-02: 25/25 OK | me |
 | 6 | First live run on real postings | Pinterest new-grad role scored | both Pinterest postings **Skipped as "expired"**; the Greenhouse API said HTTP 200 (open) | AI ran; found by comparing with the API |
 | 7 | Held-out title test: I labeled 30 titles before seeing the rule | some disagreement | 26/28 agreement; 2 "maybe" excluded | me (labels), AI (eval) |
 | 8 | Break attempt: misspelled "Pintrest Inc" | held | held, but the output **listed files that were never written** | AI found while reviewing the output |
@@ -24,7 +24,7 @@ This is the honest record of building the new-grad software-engineer sponsor che
 
 ## 2. What was checked, changed, or learned
 
-- **"Is this AI slop?"** I asked the AI to review its own first Change Brief. It found it had used "Meta vs Meta Platforms" as an example without checking it. Checking showed **Google, Amazon, and Meta Platforms have no rows at all, and Alphabet Inc has a blank row**. That became failure case F2 and one of the recipe's named failure modes. The same review found the brief said "the rule is mine" about a rule the AI wrote; removed.
+- **Review of the first Change Brief.** I asked the AI to review its own draft critically before building. It found it had used "Meta vs Meta Platforms" as an example without checking it. Checking showed **Google, Amazon, and Meta Platforms have no rows at all, and Alphabet Inc has a blank row**. That became failure case F2 and one of the recipe's named failure modes. The same review found the brief said "the rule is mine" about a rule the AI wrote; removed.
 - **"Why not use the job description?"** I suggested checking the posting text for seniority. The AI explained that the sponsorship history has no descriptions (only five titles per company), but the current posting does. I asked for it to be built. It found that **Databricks "Software Engineer, Web Products" asks 4+ years** while scoring Apply.
 - **"What's n/a in the last 3 rows?"** My question exposed two problems: "not checked" was labeled model-judgment, and the sample only had posting text for 4 of 10 roles because of how the fixtures were built. Both fixed.
 - **Title labels.** Two of my held-out labels disagreed with the rule. Looking again, both were misreads on my part ("Senior … (Mobile Team)" I had marked yes; "QA Analyst and Tester" I had marked no). I corrected them, but the original labels and the reason are kept in the file, and the worked run reports both numbers because the corrected one is biased toward the rule. "Prin Developer, IT" stays an open question ("Prin" may mean Principal).
@@ -36,7 +36,15 @@ This is the honest record of building the new-grad software-engineer sponsor che
 - Does "Software Engineer II" really count as reachable for a new grad everywhere? It varies by company.
 - Should the maintained `check-liveness.mjs` itself stop calling content-heuristic results "expired"? I worked around it in my own namespace rather than patching a maintained file.
 
-✍️ *Pavithra: add 2–4 sentences in your own words: what surprised you most, and what you would do differently.*
+### My reflection
+
+*Points chosen by me from the session; wording drafted with the AI and approved by me.*
+
+**What surprised me.** The repository's own liveness checker reported an open Pinterest new-grad posting as closed, and nothing in normal use would have shown me that mistake. I was also surprised that Google has no row in the sponsorship data at all, and that about a third of the companies listed as software sponsors have sponsored only senior titles. A "sponsor" list is much less useful to a new graduate than it looks.
+
+**What I learned about working with AI.** The assistant wrote confident statements that were not true: an example it had not checked, a sentence claiming the title rule was mine, and a note saying I had reviewed the decisions before I had. My questions caught these: asking for a critical review of the draft, asking what "n/a" meant in the report, and asking why the job description wasn't used. That last question led to the posting-level check, which flags postings that ask for more experience than a new grad has (Databricks asked for 4+ years) without changing the score. I learned to treat the AI's output as a draft to verify, not an answer.
+
+**What I would do differently.** Read titles more carefully when labeling (I misread two), ask what an unfamiliar output means as soon as I see it, and settle the project's scope earlier instead of adding features midway.
 
 ## 3. Human / AI contributions
 

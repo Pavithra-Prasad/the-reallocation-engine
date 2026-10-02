@@ -184,7 +184,7 @@ Pavithra-Prasad: "Yes, I confirmed the grep myself in my terminal"; the approval
 | Ran | Saw | Expected |
 |---|---|---|
 | `sponsor_check.py --sample` | Apply 3 · Consider 1 · Skip 2 · Held 4; both outputs written | four held roles, none scored by guess |
-| `test_sponsor_check.py` | 25 tests OK (Python 3.9.6 and 3.13) | all pass offline |
+| `test_sponsor_check.py` | 25 tests OK on Python 3.9.6 (AI's runs) and 3.13 (my run, 2026-10-02) | all pass offline |
 | live run on 4 real postings, final code | Apply 3 · Skip 1; Pinterest university grad Apply; Databricks "check first, 4+ years" | dead URL Skips; no open posting zeroed |
 | live run 1 on the same postings, first code | both open Pinterest postings Skipped as expired | (this is the defect found) |
 | `--census` | v0 234/573, v1 214/573 | reproduces the brief's 234/573 under v0 |
