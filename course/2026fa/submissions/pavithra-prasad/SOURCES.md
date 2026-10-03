@@ -38,6 +38,7 @@ This lists what the submission is built on (the repository, its governing docume
 ## Tools
 
 - Claude Code (Anthropic), model Claude Opus 5.5: AI coding assistant, used throughout.
+- ChatGPT (OpenAI): one independent grading review of the main files on 2026-10-02; its points and what was accepted or rejected are in `FRICTIONAL.md` §6.
 - Node 20.18.0, npm 10.8.2, Python 3.9.6 (AI's runs) and 3.13 (my runs), PyYAML 6.0.3, git 2.50.1, gh 2.88.1.
 
 ## What the AI contributed vs what I did

@@ -2,22 +2,22 @@
 
 ## Executive summary
 
-This report checks 10 software job postings for a new graduate on OPT who will need visa sponsorship. It asks whether each company has a record of sponsoring entry-level software engineers, whether the posting is still open, and whether hiring can finish before the OPT unemployment deadline (2027-04-15, from the student's own dates).
+This report checks 10 software job postings for a new graduate on OPT who will need visa sponsorship. It asks whether the company's top five recorded sponsored titles include a software title that the keyword rule classifies as non-senior, whether the posting is still open, and whether hiring can finish before the student runs out of OPT unemployment days (2027-04-15, from the student's own dates, assuming no work in between; any work moves this date later).
 
 **Result:** Apply 3 · Consider 1 · Skip 2 · Held for a human 4. 6 of 10 were skipped or held.
 
-Labels: **record** = read from a repo data file; **model-judgment** = inferred by a rule in this script; **your-input** = supplied by the student, unchecked.
+Labels: **record** = read from a named repository data file or returned by a named live checker/API; **model-judgment** = inferred by a rule in this script; **your-input** = supplied by the student, unchecked.
 
 ## Decisions
 
 | Role | Decision | Next action | Sponsorship evidence | Live? | Posting level | Timeline | Form D (sample only) | H-1B median salary vs BLS median |
 |---|---|---|---|---|---|---|---|---|
-| Pinterest, Inc. · Software Engineer I, Backend | **Apply** (0.540) | tailor application | entry-level-swe: 1364 approvals; entry-level titles ['Software Engineer', 'Software Engineer II', 'Software Engineer I'] [record + model-judgment] | active [record] | entry: posting says 'new grad' [model-judgment] | 1.0 [your-input] | not in sample | $156,853 vs $133,080 [record] |
-| Uber Technologies Inc · Backend Engineer, New Grad | **Apply** (0.525) | tailor application | entry-level-swe: 3984 approvals; entry-level titles ['Software Engineer II', 'Software Engineer', 'SOFTWARE ENGINEER'] [record + model-judgment] | active [record] | entry: posting says 'new grad' [model-judgment] | 1.0 [your-input] | not in sample | $165,000 vs $133,080 [record] |
-| Airbnb, Inc. · Full-Stack Software Engineer | **Apply** (0.495) | check first: the posting asks for more experience than a new grad has; tailor only if you meet it | entry-level-swe: 1000 approvals; entry-level titles ['Software Engineer'] [record + model-judgment] | active [record] | senior: posting asks 5+ years of experience [model-judgment] | 1.0 [your-input] | not in sample | $158,080 vs missing (no BLS row) [record] |
-| Chime Financial Inc · Software Engineer, Backend (New Grad) | **Consider** (0.415) | network first: ask whether they sponsor new grads before tailoring | senior-only-swe: 580 approvals; entry-level titles none [record + model-judgment] | active [record] | entry: posting says 'recent grad' [model-judgment] | 1.0 [your-input] | not in sample | $240,108 vs $133,080 [record] |
-| Databricks, Inc. · Software Engineer, New Grad | **Skip** (0.000) | network, don't apply: strong new-grad sponsor but posting closed | entry-level-swe: 1640 approvals; entry-level titles ['Software Engineer'] [record + model-judgment] | expired [record] | not checked (no posting text) | 1.0 [your-input] | filed 31-DEC-2025, sold $4,082,050,250; filed 31-DEC-2025, sold $23,017,200 [record] | $149,422 vs $133,080 [record] |
-| Smartsheet Inc · Software Engineer (starts after a long process) | **Skip** (0.000) | skip | entry-level-swe: 240 approvals; entry-level titles ['SOFTWARE ENGINEER II'] [record + model-judgment] | active [record] | entry: posting asks 2+ years of experience [model-judgment] | 0.0 [your-input] | not in sample | $145,000 vs $133,080 [record] |
+| Pinterest, Inc. · Software Engineer I, Backend | **Apply** (0.540) | tailor application | entry-level-swe: 1364 approvals; entry-level titles ['Software Engineer', 'Software Engineer II', 'Software Engineer I'] [record + model-judgment] | active [your-input] | entry: posting says 'new grad' [model-judgment] | 1.0 [your-input] | not in sample | $156,853 vs $133,080 [record] |
+| Uber Technologies Inc · Backend Engineer, New Grad | **Apply** (0.525) | tailor application | entry-level-swe: 3984 approvals; entry-level titles ['Software Engineer II', 'Software Engineer', 'SOFTWARE ENGINEER'] [record + model-judgment] | active [your-input] | entry: posting says 'new grad' [model-judgment] | 1.0 [your-input] | not in sample | $165,000 vs $133,080 [record] |
+| Airbnb, Inc. · Full-Stack Software Engineer | **Apply** (0.495) | check first: the posting asks for more experience than a new grad has; tailor only if you meet it | entry-level-swe: 1000 approvals; entry-level titles ['Software Engineer'] [record + model-judgment] | active [your-input] | senior: posting asks 5+ years of experience [model-judgment] | 1.0 [your-input] | not in sample | $158,080 vs missing (no BLS row) [record] |
+| Chime Financial Inc · Software Engineer, Backend (New Grad) | **Consider** (0.415) | network first: ask whether they sponsor new grads before tailoring | senior-only-swe: 580 approvals; entry-level titles none [record + model-judgment] | active [your-input] | entry: posting says 'recent grad' [model-judgment] | 1.0 [your-input] | not in sample | $240,108 vs $133,080 [record] |
+| Databricks, Inc. · Software Engineer, New Grad | **Skip** (0.000) | network, don't apply: strong new-grad sponsor but posting closed | entry-level-swe: 1640 approvals; entry-level titles ['Software Engineer'] [record + model-judgment] | expired [your-input] | not checked (no posting text) | 1.0 [your-input] | filed 31-DEC-2025, sold $4,082,050,250; filed 31-DEC-2025, sold $23,017,200 [record] | $149,422 vs $133,080 [record] |
+| Smartsheet Inc · Software Engineer (starts after a long process) | **Skip** (0.000) | skip | entry-level-swe: 240 approvals; entry-level titles ['SOFTWARE ENGINEER II'] [record + model-judgment] | active [your-input] | entry: posting asks 2+ years of experience [model-judgment] | 0.0 [your-input] | not in sample | $145,000 vs $133,080 [record] |
 
 ## Held: a human must look these up
 
@@ -25,6 +25,17 @@ Labels: **record** = read from a repo data file; **model-judgment** = inferred b
 - **Google LLC · Software Engineer, University Grad**: G-sponsorship: no row in the sponsorship CSV after name normalisation; absence of a row is not evidence of non-sponsorship
 - **Peloton Interactive · Full-Stack Engineer**: G-sponsorship: 2 rows match: PELOTON INTERACTIVE INC, PELOTON INTERACTIVE LLC; the script will not pick one
 - **Twilio Inc · Software Engineer (L2)**: G1 liveness: uncertain (page checker said active but Greenhouse API HTTP 404); a human must open the posting
+
+## Try these instead
+
+For each role that is not a clean Apply: other companies in the same city, not already in this run, whose sponsorship record shows a software title the keyword rule classifies as non-senior, ranked by approvals. Names and counts are records; the entry-level class is model-judgment; none of this says a role is open now.
+
+- **Chime Financial Inc** (Consider): DOCUSIGN INC (1082 approvals); MAPLEBEAR INC (498 approvals); DROPBOX INC (430 approvals)
+- **Databricks, Inc.** (Skip): DOCUSIGN INC (1082 approvals); MAPLEBEAR INC (498 approvals); DROPBOX INC (430 approvals)
+- **Smartsheet Inc** (Skip): ZIPSTORM INC (18 approvals); PETABYTE TECHNOLOGY INC (12 approvals)
+- **Twilio Inc** (Held): DOCUSIGN INC (1082 approvals); MAPLEBEAR INC (498 approvals); DROPBOX INC (430 approvals)
+
+Network targets with a suggested first question: `network-targets.md` (2 this run).
 
 ## What this run did not verify
 

@@ -4,5 +4,6 @@ $ python3 scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/spons
   Apply     Databricks, Inc.             check first: the posting asks for more experience than a new grad has; tailor only if you meet it
   Apply     Pinterest, Inc.              tailor application, after reading the posting's experience requirement (the rule could not find one)
   Skip      Chime Financial Inc          skip
-  outputs: course/2026fa/submissions/pavithra-prasad/worked-run/live-run-final/{run-log.json, report.md, roles.json, role-scores.json, role-scores.md}
+                                         try instead: UBER TECHNOLOGIES INC, DOCUSIGN INC, AIRBNB INC
+  outputs: course/2026fa/submissions/pavithra-prasad/worked-run/live-run-final/{run-log.json, report.md, network-targets.md, roles.json, role-scores.json, role-scores.md}
 exit 0

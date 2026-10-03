@@ -1,7 +1,8 @@
+Break attempts re-run 2026-10-03 on the final code.
 
-### B1 OPT deadline already passed (F5)
+### B1 OPT unemployment days used up (F5)
 $ python3 scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/sponsor_check.py --persona scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/persona-deadline-passed.json --roles scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/roles.json --liveness-fixture scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/liveness.json --run-date 2026-10-01 --out-dir course/2026fa/submissions/pavithra-prasad/worked-run/break-tests/out-b1
-STOP: G0 input: OPT unemployment deadline 2026-04-05 is before run date 2026-10-01; nothing to score
+STOP: G0 input: unemployment days used (90) have reached the ceiling (90); nothing to score
 exit 2
 
 ### B2 write over a tracked repo file
@@ -18,18 +19,11 @@ exit 2
 $ python3 scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/sponsor_check.py --persona scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/persona.json --roles course/2026fa/submissions/pavithra-prasad/worked-run/break-tests/roles-typo.json --liveness-fixture course/2026fa/submissions/pavithra-prasad/worked-run/break-tests/liveness-typo.json --run-date 2026-10-01 --out-dir course/2026fa/submissions/pavithra-prasad/worked-run/break-tests/out-b4
 ✓ 1 roles → Apply 0 · Consider 0 · Skip 0 · Held 1
   HELD      Pintrest Inc                 G-sponsorship: no row in the sponsorship CSV after name normalisation; absence of a row is not evidence of non-sponsorship
-  outputs: course/2026fa/submissions/pavithra-prasad/worked-run/break-tests/out-b4/{run-log.json, report.md, roles.json, role-scores.json, role-scores.md}
+  outputs: course/2026fa/submissions/pavithra-prasad/worked-run/break-tests/out-b4/{run-log.json, report.md, network-targets.md, roles.json}
+  scorer not run: no role passed the gates
 exit 0
 
 ### B5 date in the wrong format
 $ python3 scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/sponsor_check.py --persona course/2026fa/submissions/pavithra-prasad/worked-run/break-tests/persona-bad-date.json --roles scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/roles.json --liveness-fixture scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/liveness.json --run-date 2026-10-01 --out-dir course/2026fa/submissions/pavithra-prasad/worked-run/break-tests/out-b5
 STOP: G0 input: opt_ead_start is missing or not YYYY-MM-DD (got '15/01/2027')
 exit 2
-
-### B4 rerun after fixing the output message
-$ python3 scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/sponsor_check.py --persona scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/persona.json --roles course/2026fa/submissions/pavithra-prasad/worked-run/break-tests/roles-typo.json --liveness-fixture course/2026fa/submissions/pavithra-prasad/worked-run/break-tests/liveness-typo.json --run-date 2026-10-01 --out-dir course/2026fa/submissions/pavithra-prasad/worked-run/break-tests/out-b4
-✓ 1 roles → Apply 0 · Consider 0 · Skip 0 · Held 1
-  HELD      Pintrest Inc                 G-sponsorship: no row in the sponsorship CSV after name normalisation; absence of a row is not evidence of non-sponsorship
-  outputs: course/2026fa/submissions/pavithra-prasad/worked-run/break-tests/out-b4/{run-log.json, report.md, roles.json}
-  scorer not run: no role passed the gates
-exit 0

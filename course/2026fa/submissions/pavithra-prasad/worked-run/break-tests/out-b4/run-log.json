@@ -17,7 +17,8 @@
   "liveness_mode": "fixture:course/2026fa/submissions/pavithra-prasad/worked-run/break-tests/liveness-typo.json",
   "opt_unemployment_deadline": {
     "value": "2027-04-15",
-    "source": "your-input"
+    "source": "your-input",
+    "note": "assumes continuous unemployment from 2027-01-15 (later of EAD start 2027-01-15 and run date 2026-10-01); 0 of 90 days already used, 90 remain; working part of that time moves the date later"
   },
   "counts": {
     "input": 1,
@@ -65,7 +66,7 @@
       },
       "liveness": {
         "value": "active",
-        "source": "record",
+        "source": "your-input",
         "note": "fixture:course/2026fa/submissions/pavithra-prasad/worked-run/break-tests/liveness-typo.json; no reason"
       },
       "greenhouse_api": {
@@ -79,7 +80,13 @@
         "note": "no posting text (no Greenhouse id, or API did not return 200)"
       },
       "held": "G-sponsorship: no row in the sponsorship CSV after name normalisation; absence of a row is not evidence of non-sponsorship",
-      "next_action": "manual lookup before any effort"
+      "next_action": "manual lookup before any effort",
+      "alternatives": {
+        "value": [],
+        "source": "model-judgment",
+        "note": "no single matched row, so no city to search"
+      }
     }
-  ]
+  ],
+  "network_targets": []
 }

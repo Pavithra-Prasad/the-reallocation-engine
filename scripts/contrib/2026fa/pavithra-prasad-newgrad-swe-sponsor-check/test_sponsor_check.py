@@ -53,13 +53,74 @@ class FixtureRun(unittest.TestCase):
         return self.by[rid]["scorer"]["recommendation"]
 
     def test_both_outputs_written(self):
-        for f in ("run-log.json", "report.md", "roles.json", "role-scores.json", "role-scores.md"):
+        for f in ("run-log.json", "report.md", "network-targets.md", "roles.json", "role-scores.json", "role-scores.md"):
             self.assertTrue(os.path.exists(os.path.join(self.out, f)), f)
 
-    def test_every_value_labeled(self):
+    def test_try_instead_same_city_entry_level_not_in_run(self):
+        alts = self.by["chime-backend"]["alternatives"]
+        self.assertEqual(alts["source"], sc.MODEL)
+        picks = alts["value"]
+        self.assertTrue(0 < len(picks) <= 3)
+        with open(os.path.join(FIX, "roles.json")) as f:
+            in_run = {sc.norm(r["company"]) for r in json.load(f)}
+        sponsors = sc.load_sponsors()
+        for a in picks:
+            self.assertNotIn(sc.norm(a["company"]), in_run)
+            ev = sc.sponsorship_evidence(a["company"], sponsors)
+            self.assertEqual(ev["evidence_class"]["value"], "entry-level-swe")
+            self.assertEqual(ev["location"]["value"].upper(), "SAN FRANCISCO, CA")
+        counts = [a["total_approvals"] for a in picks]
+        self.assertEqual(counts, sorted(counts, reverse=True))
+
+    def test_try_instead_only_when_not_apply_and_never_guessed(self):
+        self.assertNotIn("alternatives", self.by["pinterest-swe1"])      # Apply
+        self.assertEqual(self.by["google-swe"]["alternatives"]["value"], [])  # no row, no city
+
+    def test_network_targets(self):
+        names = [t["company"] for t in self.log["network_targets"]]
+        self.assertEqual(sorted(names), ["Chime Financial Inc", "Databricks, Inc."])
+        with open(os.path.join(self.out, "network-targets.md")) as f:
+            md = f.read()
+        self.assertTrue(md.startswith("# Network targets"))
+        self.assertIn("## Executive summary", md)
+        self.assertNotIn("Pinterest", md)
+
+    def test_label_vocabulary(self):
         found = set(sources(self.log))
         self.assertTrue(found, "no labels found")
         self.assertTrue(found <= LABELS, found - LABELS)
+
+    def test_every_evidence_value_labeled(self):
+        # The output contract: every evidence value (inputs and looked-up
+        # evidence) is {value, source}. Computed outputs (scorer result,
+        # next_action, held reason) and run metadata are not evidence.
+        def labeled(x):
+            return isinstance(x, dict) and "value" in x and x.get("source") in LABELS
+        common = ("company", "title", "url", "liveness", "greenhouse_api", "posting_level", "funding_form_d")
+        scored_only = ("timeline", "fit", "sponsorship_term")
+        for e in self.log["evaluated"] + self.log["held"]:
+            keys = common + (scored_only if "scorer" in e else ())
+            for k in keys:
+                self.assertTrue(labeled(e[k]), "%s.%s unlabeled: %r" % (e["role_id"], k, e[k]))
+            if "alternatives" in e:
+                self.assertTrue(labeled(e["alternatives"]), "%s.alternatives unlabeled" % e["role_id"])
+            w = e["wage_context"]
+            self.assertTrue(labeled(w) or all(labeled(v) for v in w.values()), "%s.wage_context" % e["role_id"])
+            sp = e["sponsorship"]
+            if sp["status"] == "ok":
+                for k, v in sp.items():
+                    if k != "status":
+                        self.assertTrue(labeled(v), "%s.sponsorship.%s unlabeled" % (e["role_id"], k))
+        self.assertTrue(labeled(self.log["run_date"]))
+        self.assertTrue(labeled(self.log["opt_unemployment_deadline"]))
+
+    def test_fixture_answers_are_never_records(self):
+        # invented liveness and Greenhouse fixtures are your-input, not record
+        for e in self.log["evaluated"] + self.log["held"]:
+            self.assertEqual(e["liveness"]["source"], sc.INPUT, e["role_id"])
+            self.assertEqual(e["greenhouse_api"]["source"], sc.INPUT, e["role_id"])
+        with open(os.path.join(self.out, "roles.json")) as f:
+            self.assertTrue(all(r["liveness"]["source"] == sc.INPUT for r in json.load(f)))
 
     def test_entry_level_sponsor_applies(self):
         self.assertEqual(self.by["pinterest-swe1"]["sponsorship"]["evidence_class"]["value"], "entry-level-swe")
@@ -131,7 +192,7 @@ class Stops(unittest.TestCase):
             with self.assertRaises(sc.StopRun) as cm:
                 sc.run(os.path.join(FIX, "persona-deadline-passed.json"), os.path.join(FIX, "roles.json"), out,
                        os.path.join(FIX, "liveness.json"), RUN_DATE)
-            self.assertIn("deadline", str(cm.exception))
+            self.assertIn("unemployment days used (90)", str(cm.exception))
             self.assertFalse(os.path.exists(os.path.join(out, "report.md")))
         finally:
             shutil.rmtree(out, ignore_errors=True)
@@ -146,6 +207,27 @@ class Rules(unittest.TestCase):
     def test_norm_strips_suffix_words_only(self):
         self.assertEqual(sc.norm("Databricks, Inc."), sc.norm("DATABRICKS INC"))
         self.assertEqual(sc.norm("Cisco"), "cisco")
+
+    def test_liveness_labels_in_live_mode(self):
+        # live answers: the checker's or the API's word is a record; this
+        # script's own reclassification or a conflict is a model-judgment
+        self.assertEqual(sc.liveness_source("HTTP 404"), sc.REC)
+        self.assertEqual(sc.liveness_source("checker said expired from a content heuristic (x), not an HTTP 404/410; Greenhouse API HTTP 200"), sc.REC)
+        self.assertEqual(sc.liveness_source("checker said expired from a content heuristic (x), not an HTTP 404/410"), sc.MODEL)
+        self.assertEqual(sc.liveness_source("page checker said active but Greenhouse API HTTP 404"), sc.MODEL)
+        self.assertEqual(sc.liveness_source("HTTP 404", fixture=True), sc.INPUT)
+
+    def test_opt_clock_counts_used_days(self):
+        p = {"opt_ead_start": "2027-01-15", "unemployment_ceiling_days": 90}
+        # not yet on OPT: clock starts at EAD start
+        self.assertEqual(sc.opt_deadline(p, RUN_DATE)[0], dt.date(2027, 4, 15))
+        # already on OPT with 30 days used: 60 remain from the run date
+        on_opt = dict(p, opt_ead_start="2026-06-01", unemployment_days_used=30)
+        deadline, note = sc.opt_deadline(on_opt, RUN_DATE)
+        self.assertEqual(deadline, dt.date(2026, 11, 30))
+        self.assertIn("assumes continuous unemployment", note)
+        with self.assertRaises(sc.StopRun):
+            sc.opt_deadline(dict(on_opt, unemployment_days_used=90), RUN_DATE)
 
     def test_content_heuristic_expired_is_not_trusted(self):
         # regression: 2026-10-01 live run, Pinterest posting open on the API was reported expired

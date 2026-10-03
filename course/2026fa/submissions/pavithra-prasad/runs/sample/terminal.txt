@@ -1,0 +1,19 @@
+$ python3 scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/sponsor_check.py --sample --out-dir course/2026fa/submissions/pavithra-prasad/runs/sample
+✓ 10 roles → Apply 3 · Consider 1 · Skip 2 · Held 4
+  Apply     Pinterest, Inc.              tailor application
+  Consider  Chime Financial Inc          network first: ask whether they sponsor new grads before tailoring
+                                         try instead: DOCUSIGN INC, MAPLEBEAR INC, DROPBOX INC
+  Skip      Databricks, Inc.             network, don't apply: strong new-grad sponsor but posting closed
+                                         try instead: DOCUSIGN INC, MAPLEBEAR INC, DROPBOX INC
+  Skip      Smartsheet Inc               skip
+                                         try instead: ZIPSTORM INC, PETABYTE TECHNOLOGY INC
+  Apply     Airbnb, Inc.                 check first: the posting asks for more experience than a new grad has; tailor only if you meet it
+  Apply     Uber Technologies Inc        tailor application
+  HELD      Alphabet Inc                 G-sponsorship: row exists but Total Approvals is blank or 0; this can mean the sponsoring entity has a different legal name
+  HELD      Google LLC                   G-sponsorship: no row in the sponsorship CSV after name normalisation; absence of a row is not evidence of non-sponsorship
+  HELD      Peloton Interactive          G-sponsorship: 2 rows match: PELOTON INTERACTIVE INC, PELOTON INTERACTIVE LLC; the script will not pick one
+  HELD      Twilio Inc                   G1 liveness: uncertain (page checker said active but Greenhouse API HTTP 404); a human must open the posting
+                                         try instead: DOCUSIGN INC, MAPLEBEAR INC, DROPBOX INC
+  network targets: Chime Financial Inc, Databricks, Inc.
+  outputs: course/2026fa/submissions/pavithra-prasad/runs/sample/{run-log.json, report.md, network-targets.md, roles.json, role-scores.json, role-scores.md}
+exit 0

@@ -6,7 +6,7 @@
 
 ## Purpose
 
-Answer three questions per job before you spend an hour tailoring for it: has this company sponsored *entry-level* software engineers, or only senior ones? Is the posting really open? Can hiring finish before your OPT unemployment deadline? If the records can't answer, it says so and holds the job for you instead of guessing.
+Answer three questions per job before you spend an hour tailoring for it: does the company's sponsorship record show any *non-senior* software title among its top five sponsored titles, or only senior ones? (That is evidence about new-grad sponsorship, not proof of it.) Is the posting really open? Can hiring finish before you would use up your OPT unemployment days, assuming you are not working in the meantime? If the records can't answer, it says so and holds the job for you instead of guessing. When a job isn't a clean Apply, it suggests up to three other companies in the same city with entry-level sponsorship records, and it lists who to network with and what to ask first.
 
 ## What it can verify
 
@@ -22,6 +22,7 @@ Answer three questions per job before you spend an hour tailoring for it: has th
 - Whether a title is really entry-level. A keyword rule decides; it agreed with a human on 26 of 28 unseen titles.
 - Which legal entity actually sponsors. Alphabet is blank and Google LLC is missing, so those jobs are held.
 - E-Verify (needed for STEM OPT), real funding beyond the samples, your fit, or your OPT dates.
+- H-1B lottery timing, selection, or whether an employer is cap-exempt. The timeline check covers only the OPT unemployment window, and for a student who hasn't started OPT yet it rarely filters anything.
 
 ## Dependencies
 
@@ -34,13 +35,13 @@ Answer three questions per job before you spend an hour tailoring for it: has th
 
 Run from the repo root, not from a subfolder (the first attempt from `course/…/` fails with "No such file").
 
-Offline sample, ten fictional-persona roles (expected: Apply 3 · Consider 1 · Skip 2 · Held 4):
+Offline sample, ten fictional-persona roles (expected: Apply 3 · Consider 1 · Skip 2 · Held 4; written to the gitignored `out/sample/` beside the script):
 
 ```bash
 python3 scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/sponsor_check.py --sample
 ```
 
-Offline tests (expected: 25 OK):
+Offline tests (expected: 32 OK):
 
 ```bash
 python3 scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/test_sponsor_check.py
@@ -52,7 +53,7 @@ Senior-only share in the whole dataset (expected: v0 234/573, v1 214/573):
 python3 scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/sponsor_check.py --census
 ```
 
-A posting that is really gone (expected: Skip, liveness `expired`, HTTP 404):
+A posting that is really gone (expected: `❌ expired` with reason `HTTP 404`; in a recipe run this role then Skips):
 
 ```bash
 npm run ats:liveness -- https://boards.greenhouse.io/acmecorp/jobs/12345
@@ -61,12 +62,13 @@ npm run ats:liveness -- https://boards.greenhouse.io/acmecorp/jobs/12345
 ## What it produces
 
 - `report.md`: your decisions, next actions, the jobs held for you and why, and what was not checked.
-- `run-log.json`: the same run for an agent, every value labeled record, model-judgment, or your-input.
+- `run-log.json`: the same run for an agent, every evidence value labeled record, model-judgment, or your-input. Invented test fixtures are always your-input, never record.
+- `network-targets.md`: companies to talk to rather than apply to, each with a suggested first question.
 - The scorer's own `role-scores.md` with its per-term audit.
 
 ## Named failure modes
 
 1. **Senior-only sponsor read as "sponsors SWEs."** A company whose sponsored software titles are all Senior/Staff/Principal looks like a sponsor. The student who sees "sponsors software engineers" on a list is the one least likely to check the titles. The recipe demotes these to Consider and says "network first."
 2. **Open posting reported closed.** On 2026-10-01 the repo's page checker reported Pinterest's open "University Grad Software Engineer 2027" posting as expired ("insufficient content"). The liveness gate then zeroed it. Nobody sees a skipped job, so this error is invisible unless something cross-checks. The recipe now holds such results and asks the job-board API.
-3. **Missing record read as non-sponsor.** Google is absent from the CSV, and Alphabet's row is blank. Treating either as "doesn't sponsor" would skip one of the largest sponsors. The recipe holds them.
+3. **Missing record read as non-sponsor.** Google is absent from the CSV, and Alphabet's row is blank. Treating either as "doesn't sponsor" would skip a company widely reported to sponsor, a claim this data can neither confirm nor refute. The recipe holds them.
 4. **"Entry-level" posting that isn't.** Databricks "Software Engineer, Web Products" scores Apply on sponsorship but asks for 4+ years. The recipe changes the next action to "check first."

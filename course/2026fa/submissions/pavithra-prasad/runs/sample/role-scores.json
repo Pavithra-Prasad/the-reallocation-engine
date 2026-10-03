@@ -1,7 +1,7 @@
 {
   "_scorer": "bayesian-role-scorer",
   "_chapter": 11,
-  "generated": "2026-10-01",
+  "generated": "2026-10-03",
   "config": {
     "weights": {
       "sponsorship": 0.35,
@@ -50,7 +50,7 @@
           {
             "factor": "liveness",
             "multiplier": 1,
-            "source": "record"
+            "source": "your-input"
           },
           {
             "factor": "timeline",
@@ -93,7 +93,7 @@
           {
             "factor": "liveness",
             "multiplier": 1,
-            "source": "record"
+            "source": "your-input"
           },
           {
             "factor": "timeline",
@@ -136,7 +136,7 @@
           {
             "factor": "liveness",
             "multiplier": 0,
-            "source": "record"
+            "source": "your-input"
           },
           {
             "factor": "timeline",
@@ -179,7 +179,7 @@
           {
             "factor": "liveness",
             "multiplier": 1,
-            "source": "record"
+            "source": "your-input"
           },
           {
             "factor": "timeline",
@@ -222,7 +222,7 @@
           {
             "factor": "liveness",
             "multiplier": 1,
-            "source": "record"
+            "source": "your-input"
           },
           {
             "factor": "timeline",
@@ -265,7 +265,7 @@
           {
             "factor": "liveness",
             "multiplier": 1,
-            "source": "record"
+            "source": "your-input"
           },
           {
             "factor": "timeline",

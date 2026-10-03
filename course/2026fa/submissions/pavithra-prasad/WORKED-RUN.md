@@ -14,7 +14,7 @@
 
 | Input | Value | Label |
 |---|---|---|
-| Persona | `scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/persona.json`: "Meera Joshi (fictional)", `meera.joshi@example.com`, MS Information Systems (STEM), program end 2026-12-12, OPT EAD start 2027-01-15, 90-day unemployment ceiling, 20-day buffer, 60-day default hiring lag | your-input (invented) |
+| Persona | `scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/persona.json`: "Meera Joshi (fictional)", `meera.joshi@example.com`, MS Information Systems (STEM), program end 2026-12-12, OPT EAD start 2027-01-15, 90-day unemployment ceiling with 0 days used, 20-day buffer, 60-day default hiring lag | your-input (invented) |
 | Roles | `course/2026fa/submissions/pavithra-prasad/worked-run/roles-live.json`: 3 real postings found on the Greenhouse job-board API on 2026-10-01, plus the repo's own dead example URL | your-input |
 | Fit per role | 0.8 / 0.7 / 0.6 / 0.8, self-rated for the persona | your-input |
 | Run date | 2026-10-01 (system date) | your-input |
@@ -23,7 +23,7 @@ The three real postings: Pinterest "University Grad Software Engineer 2027 (USA)
 
 ## 2. Commands and real output
 
-### Final live run (frozen code)
+### Final live run (final code, 2026-10-03)
 
 ```
 $ python3 scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/sponsor_check.py --persona scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/persona.json --roles course/2026fa/submissions/pavithra-prasad/worked-run/roles-live.json --out-dir course/2026fa/submissions/pavithra-prasad/worked-run/live-run-final
@@ -32,7 +32,8 @@ $ python3 scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/spons
   Apply     Databricks, Inc.             check first: the posting asks for more experience than a new grad has; tailor only if you meet it
   Apply     Pinterest, Inc.              tailor application, after reading the posting's experience requirement (the rule could not find one)
   Skip      Chime Financial Inc          skip
-  outputs: course/2026fa/submissions/pavithra-prasad/worked-run/live-run-final/{run-log.json, report.md, roles.json, role-scores.json, role-scores.md}
+                                         try instead: UBER TECHNOLOGIES INC, DOCUSIGN INC, AIRBNB INC
+  outputs: course/2026fa/submissions/pavithra-prasad/worked-run/live-run-final/{run-log.json, report.md, network-targets.md, roles.json, role-scores.json, role-scores.md}
 exit 0
 ```
 
@@ -75,20 +76,28 @@ greenhouse api job: 200
 
 ### Sample run (offline, the version the tests use)
 
+Final code, 2026-10-03; saved in `runs/sample/terminal.txt`. In this run the liveness and Greenhouse answers come from invented fixtures, so the report labels them your-input, not record.
+
 ```
-$ python3 scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/sponsor_check.py --sample
+$ python3 scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/sponsor_check.py --sample --out-dir course/2026fa/submissions/pavithra-prasad/runs/sample
 ✓ 10 roles → Apply 3 · Consider 1 · Skip 2 · Held 4
   Apply     Pinterest, Inc.              tailor application
   Consider  Chime Financial Inc          network first: ask whether they sponsor new grads before tailoring
+                                         try instead: DOCUSIGN INC, MAPLEBEAR INC, DROPBOX INC
   Skip      Databricks, Inc.             network, don't apply: strong new-grad sponsor but posting closed
+                                         try instead: DOCUSIGN INC, MAPLEBEAR INC, DROPBOX INC
   Skip      Smartsheet Inc               skip
+                                         try instead: ZIPSTORM INC, PETABYTE TECHNOLOGY INC
   Apply     Airbnb, Inc.                 check first: the posting asks for more experience than a new grad has; tailor only if you meet it
   Apply     Uber Technologies Inc        tailor application
   HELD      Alphabet Inc                 G-sponsorship: row exists but Total Approvals is blank or 0; this can mean the sponsoring entity has a different legal name
   HELD      Google LLC                   G-sponsorship: no row in the sponsorship CSV after name normalisation; absence of a row is not evidence of non-sponsorship
   HELD      Peloton Interactive          G-sponsorship: 2 rows match: PELOTON INTERACTIVE INC, PELOTON INTERACTIVE LLC; the script will not pick one
   HELD      Twilio Inc                   G1 liveness: uncertain (page checker said active but Greenhouse API HTTP 404); a human must open the posting
-  outputs: course/2026fa/submissions/pavithra-prasad/runs/sample/{run-log.json, report.md, roles.json, role-scores.json, role-scores.md}
+                                         try instead: DOCUSIGN INC, MAPLEBEAR INC, DROPBOX INC
+  network targets: Chime Financial Inc, Databricks, Inc.
+  outputs: course/2026fa/submissions/pavithra-prasad/runs/sample/{run-log.json, report.md, network-targets.md, roles.json, role-scores.json, role-scores.md}
+exit 0
 ```
 
 ### Census and title-rule evaluation
@@ -124,7 +133,7 @@ After the labeler said both disagreements were misreads and corrected them, both
 | Greenhouse API HTTP 200 → active | record | `boards-api.greenhouse.io` |
 | Posting level "entry" (posting says "university grad") | model-judgment | phrase rule over the posting text |
 | Fit 0.8 | your-input | self-rating; no model was called |
-| Timeline 1.0 (start ≈ 2027-01-15 ≤ 2027-04-15 − 20 days) | your-input | persona dates and hiring lag |
+| Timeline 1.0 (start ≈ 2027-01-15 ≤ 2027-04-15 − 20 days; 0 days used, deadline assumes no work in between) | your-input | persona dates, days used, and hiring lag |
 | Composite 0.555 = (0.9·0.35 + 0.8·0.3) × 1 × 1 | arithmetic by `role-scorer.mjs` | weights 0.35 / 0.30 from the scorer's CONFIG |
 | Apply | scorer output | threshold 0.30 |
 | H-1B median salary $156,853 | record | CSV `median_salary_offered` |
@@ -135,9 +144,10 @@ After the labeler said both disagreements were misreads and corrected them, both
 
 1. **Hand cross-check against the source CSV.** Run by Pavithra-Prasad; compared columns in §4a.
 2. **Cross-check against the job board.** The Greenhouse API returned 200 for Pinterest job 7838591 while the page checker said expired (pasted above).
-3. **Tests.** 25 offline tests pass (`test_sponsor_check.py`; output in `TEST-REPORT.md`).
+3. **Tests.** 29 offline tests pass (`test_sponsor_check.py`; output in `TEST-REPORT.md`).
 4. **Deliberate break attempts.** Five, below and in `worked-run/break-tests/break-tests-terminal.txt`.
 5. **Scorer arithmetic checked by hand:** (0.9 × 0.35) + (0.8 × 0.30) = 0.315 + 0.240 = 0.555, matching the output.
+6. **Posting evidence is kept.** The live postings may change or disappear. What the run saw is kept in `worked-run/live-run-final/run-log.json`: for each role, the Greenhouse HTTP status, the checker's reason, and the phrase the posting-level rule matched ("university grad", "4+ years of experience"). The full posting text is not stored (it is the employer's content).
 
 ### 4a. Hand cross-check (run by Pavithra-Prasad)
 
@@ -166,7 +176,7 @@ Pavithra-Prasad: "Yes, I confirmed the grep myself in my terminal"; the approval
 **What worked.** Holding a role instead of guessing. Four sample roles and, before the fix, two live roles were held rather than scored. Each case (no row, a blank row, two rows, a checker/API conflict) would otherwise have produced a confident wrong answer. Separating the title rule's judgment from the CSV's record also made the 41% → 37% revision easy to explain: the record didn't change, the judgment did.
 
 **What it got wrong or missed.**
-- It trusted the repo's page checker. "Expired" from a content guess zeroed an open new-grad posting at a company with 1,364 approvals. I predicted 404s; I did not predict false 404s.
+- It trusted the repo's page checker. "Expired" from a content guess zeroed an open new-grad posting at a company with 1,364 approvals. I predicted real 404s; I did not predict a false "expired" from a page that simply rendered too little text (no 404 was involved).
 - The first title rule was inconsistent ("II" senior, "2" entry), as the brief predicted.
 - The output message once listed files it hadn't written (break attempt B4).
 - In the report, "not checked" was labeled model-judgment until the student asked what "n/a" meant.
@@ -178,22 +188,27 @@ Pavithra-Prasad: "Yes, I confirmed the grep myself in my terminal"; the approval
 
 ## Attestation
 - Recipe: newgrad-swe-sponsor-check v0.1.0
-- By: Pavithra-Prasad · 2026-10-01
+- By: Pavithra-Prasad · 2026-10-02 (covers runs from 2026-10-01 and 2026-10-02)
+
+"Run by" says who executed the command. Rows run by the AI assistant were run in my session at my request, and I reviewed their output; I did not re-execute them myself.
 
 ### Tested
-| Ran | Saw | Expected |
-|---|---|---|
-| `sponsor_check.py --sample` | Apply 3 · Consider 1 · Skip 2 · Held 4; both outputs written | four held roles, none scored by guess |
-| `test_sponsor_check.py` | 25 tests OK on Python 3.9.6 (AI's runs) and 3.13 (my run, 2026-10-02) | all pass offline |
-| live run on 4 real postings, final code | Apply 3 · Skip 1; Pinterest university grad Apply; Databricks "check first, 4+ years" | dead URL Skips; no open posting zeroed |
-| live run 1 on the same postings, first code | both open Pinterest postings Skipped as expired | (this is the defect found) |
-| `--census` | v0 234/573, v1 214/573 | reproduces the brief's 234/573 under v0 |
-| `--title-eval` on 28 held-out titles labeled before seeing the rule | 26/28 for both rules | an honest accuracy, not 100% |
-| **Break B1:** persona whose OPT deadline passed | `STOP: G0 input: OPT unemployment deadline 2026-04-05 is before run date 2026-10-01; nothing to score`, exit 2, no outputs | stop, invent nothing |
-| **Break B2:** `--out-dir data/examples` | `STOP: refusing to write outside the author's namespace: data/examples`, exit 2 | tracked file untouched |
-| **Break B3:** role with no `fit` | `STOP: G0 input: role no-fit is missing fit`, exit 2 | stop, no default fit invented |
-| **Break B4:** misspelled "Pintrest Inc" | held: no row in the CSV; scorer not run | no fuzzy match to Pinterest |
-| **Break B5:** date `15/01/2027` | `STOP: G0 input: opt_ead_start is missing or not YYYY-MM-DD (got '15/01/2027')`, exit 2 | stop, no date guessed |
+| Ran | Run by | Saw | Expected |
+|---|---|---|---|
+| `sponsor_check.py --sample` | me (2026-10-01, earlier version) and AI (final) | Apply 3 · Consider 1 · Skip 2 · Held 4; both outputs written | four held roles, none scored by guess |
+| `test_sponsor_check.py` | AI (Python 3.9.6) and me (Python 3.13) | final 32 tests: see `TEST-REPORT.md` for each Python version | all pass offline |
+| "try these instead" and network targets, sample | AI | Chime (senior-only, San Francisco) → DocuSign, Maplebear, Dropbox, none already in the run; `network-targets.md` lists Chime and Databricks with a question each | same-city entry-level suggestions, never for an Apply or a role with no row |
+| grep of the Pinterest row in the CSV | me | approvals, denials, salary, titles match the report | values are records, not invented |
+| live run on 4 real postings, final code | AI | Apply 3 · Skip 1; Pinterest university grad Apply; Databricks "check first, 4+ years" | dead URL Skips; no open posting zeroed |
+| live run 1 on the same postings, first code | AI | both open Pinterest postings Skipped as expired | (this is the defect found) |
+| `--census` | AI | v0 234/573, v1 214/573 | reproduces the brief's 234/573 under v0 |
+| `--title-eval` on 28 held-out titles | me (labels, before seeing the rule) and AI (ran the eval) | 26/28 for both rules | an honest accuracy, not 100% |
+| decision review (G3) | me | accepted 6, overrode Airbnb, accepted 4 held | a person decides |
+| **Break B1:** persona on OPT with all 90 unemployment days used | AI | `STOP: G0 input: unemployment days used (90) have reached the ceiling (90); nothing to score`, exit 2, no outputs | stop, invent nothing |
+| **Break B2:** `--out-dir data/examples` | AI | `STOP: refusing to write outside the author's namespace: data/examples`, exit 2 | tracked file untouched |
+| **Break B3:** role with no `fit` | AI | `STOP: G0 input: role no-fit is missing fit`, exit 2 | stop, no default fit invented |
+| **Break B4:** misspelled "Pintrest Inc" | AI | held: no row in the CSV; scorer not run | no fuzzy match to Pinterest |
+| **Break B5:** date `15/01/2027` | AI | `STOP: G0 input: opt_ead_start is missing or not YYYY-MM-DD (got '15/01/2027')`, exit 2 | stop, no date guessed |
 
 ### Did not test
 - Lever, Ashby, SmartRecruiters, or company-site postings with the API cross-check (not built).
@@ -210,4 +225,7 @@ Pavithra-Prasad: "Yes, I confirmed the grep myself in my terminal"; the approval
 - **Output message listed files never written** (break B4): `main()` now lists only files that exist and says when the scorer was not run.
 - **"n/a" labeled model-judgment in the report**: now "not checked (no posting text)", unlabeled.
 - **Sample description check covered 4 of 10 roles**: Greenhouse fixtures added for Chime, Smartsheet, Databricks.
+- **Added, not a fix (2026-10-03).** At my request: "try these instead" and `network-targets.md`. While checking the first output, the suggestions included Uber and Pinterest, which were already in the run and added nothing; companies already in the run are now left out. Tests `test_try_instead_same_city_entry_level_not_in_run`, `test_try_instead_only_when_not_apply_and_never_guessed`, `test_network_targets`.
+- **Second review (ChatGPT, 2026-10-02).** (1) Invented fixture answers were labeled `record`: in fixture mode, liveness and Greenhouse answers are now `your-input` (`test_fixture_answers_are_never_records`). (2) The OPT gate treated EAD start + 90 days as a calendar deadline, but the 90 days are accumulated unemployment: `opt_deadline()` now takes `unemployment_days_used` and prints its continuous-unemployment assumption (`test_opt_clock_counts_used_days`); break B1 now stops on days used. (3) A test named "every value labeled" only checked label spelling: replaced by `test_every_evidence_value_labeled`, and the output contract now says which fields are evidence and which are computed outputs.
+- **Pre-submission review (2026-10-02).** `--sample` rewrote tracked files on every run (the scorer stamps today's date): its default output is now a gitignored `out/` folder in my namespace. Liveness that this script's own rule had reclassified was labeled `record`: `liveness_source()` now labels it `model-judgment`. Tests `test_checker_api_conflict_is_held`, `test_api_resolved_liveness_is_a_record`.
 - **Name normaliser stripped "co" from any name** ("Cisco" → "cis"), caught before the first run: suffixes are now removed only as whole words. Test `test_norm_strips_suffix_words_only`.

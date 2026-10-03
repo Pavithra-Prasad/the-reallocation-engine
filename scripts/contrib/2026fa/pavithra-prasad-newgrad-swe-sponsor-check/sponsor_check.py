@@ -195,6 +195,86 @@ def sponsorship_evidence(company, sponsors):
     }
 
 
+def entry_level_by_city(sponsors):
+    """Index of companies whose single CSV row is in the entry-level-swe class,
+    grouped by (CITY, STATE) and ranked by approvals. Ambiguous names (more than
+    one row) are left out, as in G-sponsor."""
+    idx = {}
+    for rows in sponsors.values():
+        if len(rows) != 1:
+            continue
+        row = rows[0]
+        ev = sponsorship_evidence(row["company_name"], sponsors)
+        if ev["status"] != "ok" or ev["evidence_class"]["value"] != "entry-level-swe":
+            continue
+        city = (row["city"].strip().upper(), row["state"].strip().upper())
+        idx.setdefault(city, []).append((ev["total_approvals"]["value"], row["company_name"], ev["entry_level_swe_titles"]["value"]))
+    for picks in idx.values():
+        picks.sort(key=lambda t: (-t[0], t[1]))
+    return idx
+
+
+def alternatives(ev, company, idx, exclude=(), k=3):
+    """"Try these instead": up to k other companies in the same city whose
+    sponsorship record shows a non-senior SWE title. Names, cities, and approval
+    counts are records; the entry-level class is the keyword rule's judgment."""
+    if ev.get("status") != "ok":
+        return labeled([], MODEL, "no single matched row, so no city to search")
+    city_name, _, state = ev["location"]["value"].rpartition(", ")
+    city = (city_name.strip().upper(), state.strip().upper())
+    skip = {norm(company)} | set(exclude)
+    picks = [{"company": n, "total_approvals": a, "entry_level_swe_titles": t}
+             for a, n, t in idx.get(city, []) if norm(n) not in skip][:k]
+    return labeled(picks, MODEL,
+                   "same city as the matched row (%s, %s); entry-level-swe class by the keyword rule; ranked by approvals; "
+                   "companies already in this run are left out; "
+                   "names and counts are records; says nothing about current openings" % city)
+
+
+NETWORK_ASKS = {
+    "senior": "Does your team hire new grads on OPT, and has the company sponsored H-1B for entry-level engineers?",
+    "closed": "When does the team next hire new grads, and could we talk about the role before it opens?",
+}
+
+
+def network_targets(evaluated):
+    """Roles whose next action is to network rather than apply, with a
+    suggested first question. Feeds the networking hours of the 3-3-2 day."""
+    out = []
+    for e in evaluated:
+        if not e["next_action"].startswith("network"):
+            continue
+        kind = "closed" if e["liveness"]["value"] == "expired" else "senior"
+        out.append({"company": e["company"]["value"], "title": e["title"]["value"],
+                    "why": e["next_action"], "ask": NETWORK_ASKS[kind],
+                    "approvals": e["sponsorship"]["total_approvals"]["value"],
+                    "sponsored_titles": e["sponsorship"]["top_titles_sponsored"]["value"]})
+    return out
+
+
+def render_network_targets(log):
+    t = log["network_targets"]
+    o = ["# Network targets — %s" % log["run_date"]["value"], "",
+         "## Executive summary", "",
+         "These are companies from this run where the better next step is a conversation, not an application: "
+         "either the company's sponsorship record shows only senior software titles, or it has a strong record of "
+         "sponsoring entry-level software titles but the posting is closed. Each has a suggested first question. "
+         "%d target%s this run." % (len(t), "" if len(t) == 1 else "s"), "",
+         "## Targets", ""]
+    if not t:
+        o.append("None this run.")
+    else:
+        o += ["| Company | Role seen | Why network | Ask | Sponsorship record |", "|---|---|---|---|---|"]
+        for x in t:
+            o.append("| %s | %s | %s | %s | %d approvals; top titles %s [record] |" % (
+                x["company"], x["title"], x["why"], x["ask"], x["approvals"], x["sponsored_titles"]))
+    o += ["", "## Notes", "",
+          "- The questions are templates written into this script, not advice from a model.",
+          "- A sponsorship record is past filings (top five titles, no years); it does not show what a team will do now.",
+          "- Full run: `report.md` and `run-log.json` in this folder.", ""]
+    return "\n".join(o)
+
+
 def funding_evidence(company, form_d):
     hits = form_d.get(norm(company), [])
     if not hits:
@@ -284,6 +364,21 @@ def combine_liveness(checker, gh):
     return result, "%s; Greenhouse API HTTP %s agrees" % (reason or result, status)
 
 
+def liveness_source(reason, fixture=False):
+    """your-input when the answer came from a saved fixture (invented test data
+    is not a record); otherwise record when a checker or the API said it, and
+    model-judgment when this script's own rule decided (content heuristic
+    downgraded, or a checker/API conflict)."""
+    if fixture:
+        return INPUT
+    reason = reason or ""
+    if "Greenhouse API HTTP" in reason and "but Greenhouse API" not in reason:
+        return REC
+    if "content heuristic" in reason or "but Greenhouse API" in reason:
+        return MODEL
+    return REC
+
+
 ENTRY_PHRASES = re.compile(r"new grad|university grad|recent grad|early career|entry.level|graduating (?:in|by)", re.I)
 YEARS_RE = re.compile(r"(\d{1,2})\s*\+?\s*(?:-|–|to)?\s*(?:\d{1,2})?\s*\+?\s*years?(?:\s+of)?[^.]{0,40}experience", re.I)
 
@@ -306,10 +401,32 @@ def posting_level(gh):
     return labeled(level, MODEL, "posting asks %d+ years of experience" % min_years)
 
 
-def timeline(persona, role, run_date):
+def opt_deadline(persona, run_date):
+    """The last day of allowed unemployment, under a stated assumption.
+
+    The 90-day limit counts accumulated days of unemployment on OPT, not a
+    fixed calendar date. This computes a date only by ASSUMING the student is
+    unemployed continuously from max(EAD start, run date) onward:
+        deadline = max(EAD start, run date) + (ceiling - days already used)
+    If the student works for part of that time, the real date is later.
+    Returns (deadline, note). Stops the run if no days remain."""
+    ead = parse_date(persona.get("opt_ead_start"), "opt_ead_start")
+    ceiling = int(persona["unemployment_ceiling_days"])
+    used = int(persona.get("unemployment_days_used", 0))
+    remaining = ceiling - used
+    if remaining <= 0:
+        raise StopRun("G0 input: unemployment days used (%d) have reached the ceiling (%d); nothing to score" % (used, ceiling))
+    clock_start = max(ead, run_date)
+    deadline = clock_start + dt.timedelta(days=remaining)
+    note = ("assumes continuous unemployment from %s (later of EAD start %s and run date %s); "
+            "%d of %d days already used, %d remain; working part of that time moves the date later"
+            % (clock_start, ead, run_date, used, ceiling, remaining))
+    return deadline, note
+
+
+def timeline(persona, role, run_date, deadline):
     """G2. Returns (factor, explanation). All inputs are your-input."""
     ead = parse_date(persona.get("opt_ead_start"), "opt_ead_start")
-    deadline = ead + dt.timedelta(days=int(persona["unemployment_ceiling_days"]))
     buffer_days = int(persona.get("buffer_days", 0))
     lag = int(role.get("hiring_lag_days", persona["default_hiring_lag_days"]))
     start = max(run_date + dt.timedelta(days=lag), ead)
@@ -359,9 +476,7 @@ def run(persona_path, roles_path, out_dir, liveness_fixture=None, run_date=None,
         if k not in persona:
             raise StopRun("G0 input: persona is missing %s" % k)
     run_date = run_date or dt.date.today()
-    deadline = parse_date(persona["opt_ead_start"], "opt_ead_start") + dt.timedelta(days=int(persona["unemployment_ceiling_days"]))
-    if run_date > deadline:
-        raise StopRun("G0 input: OPT unemployment deadline %s is before run date %s; nothing to score" % (deadline, run_date))
+    deadline, deadline_note = opt_deadline(persona, run_date)
     for r in roles:
         for k in ("role_id", "company", "title", "url", "fit"):
             if k not in r:
@@ -374,16 +489,19 @@ def run(persona_path, roles_path, out_dir, liveness_fixture=None, run_date=None,
     for r in roles:
         ev = sponsorship_evidence(r["company"], sponsors)
         offline = liveness_fixture is not None
+        fixture_mode = offline or greenhouse_fixture_dir is not None
         gh = None if (offline and not greenhouse_fixture_dir) else greenhouse_lookup(r, greenhouse_fixture_dir)
         live[r["role_id"]] = combine_liveness(live[r["role_id"]], gh)
+        live_label = liveness_source(live[r["role_id"]][1], fixture_mode)
         entry = {
             "role_id": r["role_id"], "company": labeled(r["company"], INPUT), "title": labeled(r["title"], INPUT),
             "url": labeled(r["url"], INPUT), "sponsorship": ev,
             "funding_form_d": funding_evidence(r["company"], form_d),
             "wage_context": wage_evidence(r.get("soc", "15-1252"), bls),
-            "liveness": labeled(live[r["role_id"]][0], REC, "%s; %s" % (live_src, live[r["role_id"]][1] or "no reason")),
-            "greenhouse_api": labeled(gh and gh.get("http_status"), REC,
-                                      "fixture" if greenhouse_fixture_dir else ("live: boards-api.greenhouse.io" if gh else "not checked (no greenhouse id in roles file, or request failed)")),
+            "liveness": labeled(live[r["role_id"]][0], live_label,
+                                "%s; %s" % (live_src, live[r["role_id"]][1] or "no reason")),
+            "greenhouse_api": labeled(gh and gh.get("http_status"), INPUT if greenhouse_fixture_dir else REC,
+                                      "fixture (invented test data)" if greenhouse_fixture_dir else ("live: boards-api.greenhouse.io" if gh else "not checked (no greenhouse id in roles file, or request failed)")),
             "posting_level": posting_level(gh),
         }
         if ev["status"] != "ok":
@@ -394,7 +512,7 @@ def run(persona_path, roles_path, out_dir, liveness_fixture=None, run_date=None,
             entry["next_action"] = "manual lookup before any effort"
             held.append(entry)
             continue
-        t_factor, t_why = timeline(persona, r, run_date)
+        t_factor, t_why = timeline(persona, r, run_date, deadline)
         entry["timeline"] = labeled(t_factor, INPUT, t_why)
         entry["fit"] = labeled(r["fit"], INPUT, "self-rated by the student; no model was called")
         sp = SPONSOR_MAP[ev["evidence_class"]["value"]]
@@ -404,7 +522,7 @@ def run(persona_path, roles_path, out_dir, liveness_fixture=None, run_date=None,
             "role_id": r["role_id"], "company": r["company"], "title": r["title"],
             "sponsorship": {"p": sp["p"], "tier": sp["tier"], "source": MODEL},
             "fit": {"p": r["fit"], "source": INPUT},
-            "liveness": {"factor": 1.0 if live[r["role_id"]][0] == "active" else 0.0, "source": REC},
+            "liveness": {"factor": 1.0 if live[r["role_id"]][0] == "active" else 0.0, "source": live_label},
             "timeline": {"factor": t_factor, "source": INPUT},
         })
 
@@ -430,19 +548,29 @@ def run(persona_path, roles_path, out_dir, liveness_fixture=None, run_date=None,
         e["scorer"] = {"recommendation": s["recommendation"], "composite": s["composite"], "reason": s["reason"], "arithmetic": s["trace"]["arithmetic"]}
         e["next_action"] = next_action(s["recommendation"], e["sponsorship"], e["liveness"]["value"], e["posting_level"]["value"])
 
+    # "Try these instead" for every role that is not a clean Apply
+    city_idx = entry_level_by_city(sponsors)
+    in_run = {norm(r["company"]) for r in roles}
+    for e in evaluated + held:
+        if e.get("scorer", {}).get("recommendation") != "Apply":
+            e["alternatives"] = alternatives(e["sponsorship"], e["company"]["value"], city_idx, in_run)
+    targets = network_targets(evaluated)
+
     log = {
         "recipe": "pavithra-prasad-newgrad-swe-sponsor-check", "recipe_version": "0.1.0",
         "run_date": labeled(str(run_date), INPUT), "persona_file": os.path.relpath(persona_path, REPO),
         "roles_file": os.path.relpath(roles_path, REPO), "out_dir": rel_out,
         "data": {"sponsorship": SPONSOR_CSV, "form_d": FORM_D_GLOB, "bls": BLS_CSV, "scorer": SCORER},
-        "liveness_mode": live_src, "opt_unemployment_deadline": labeled(str(deadline), INPUT),
+        "liveness_mode": live_src, "opt_unemployment_deadline": labeled(str(deadline), INPUT, deadline_note),
         "counts": {"input": len(roles), "scored": len(evaluated), "held": len(held)},
-        "evaluated": evaluated, "held": held,
+        "evaluated": evaluated, "held": held, "network_targets": targets,
     }
     with open(os.path.join(out_dir, "run-log.json"), "w", encoding="utf-8") as f:
         json.dump(log, f, indent=2, default=str)
     with open(os.path.join(out_dir, "report.md"), "w", encoding="utf-8") as f:
         f.write(render_report(log))
+    with open(os.path.join(out_dir, "network-targets.md"), "w", encoding="utf-8") as f:
+        f.write(render_network_targets(log))
     return log
 
 
@@ -454,12 +582,13 @@ def render_report(log):
     o = ["# New-grad SWE sponsor check — %s" % log["run_date"]["value"], "",
          "## Executive summary", "",
          "This report checks %d software job postings for a new graduate on OPT who will need visa sponsorship. "
-         "It asks whether each company has a record of sponsoring entry-level software engineers, whether the posting is still open, "
-         "and whether hiring can finish before the OPT unemployment deadline (%s, from the student's own dates)." % (
+         "It asks whether the company's top five recorded sponsored titles include a software title that the keyword rule classifies as non-senior, whether the posting is still open, "
+         "and whether hiring can finish before the student runs out of OPT unemployment days (%s, from the student's own dates, "
+         "assuming no work in between; any work moves this date later)." % (
              log["counts"]["input"], log["opt_unemployment_deadline"]["value"]), "",
          "**Result:** Apply %d · Consider %d · Skip %d · Held for a human %d. "
          "%d of %d were skipped or held." % (n("Apply"), n("Consider"), n("Skip"), len(held), skipped_or_held, log["counts"]["input"]), "",
-         "Labels: **record** = read from a repo data file; **model-judgment** = inferred by a rule in this script; **your-input** = supplied by the student, unchecked.", "",
+         "Labels: **record** = read from a named repository data file or returned by a named live checker/API; **model-judgment** = inferred by a rule in this script; **your-input** = supplied by the student, unchecked.", "",
          "## Decisions", "",
          "| Role | Decision | Next action | Sponsorship evidence | Live? | Posting level | Timeline | Form D (sample only) | H-1B median salary vs BLS median |",
          "|---|---|---|---|---|---|---|---|---|"]
@@ -470,10 +599,10 @@ def render_report(log):
         h1b = sp["h1b_median_salary_offered"]["value"]
         fd = e["funding_form_d"]["value"]
         fd_txt = "; ".join("filed %s, sold $%s" % (h["date_filed"], "{:,.0f}".format(h["total_amount_sold"] or 0)) for h in fd) + " [record]" if fd else "not in sample"
-        o.append("| %s · %s | **%s** (%.3f) | %s | %s: %d approvals; entry-level titles %s [record + model-judgment] | %s [record] | %s | %s [your-input] | %s | %s vs %s [record] |" % (
+        o.append("| %s · %s | **%s** (%.3f) | %s | %s: %d approvals; entry-level titles %s [record + model-judgment] | %s [%s] | %s | %s [your-input] | %s | %s vs %s [record] |" % (
             e["company"]["value"], e["title"]["value"], e["scorer"]["recommendation"], e["scorer"]["composite"], e["next_action"],
             sp["evidence_class"]["value"], sp["total_approvals"]["value"], sp["entry_level_swe_titles"]["value"] or "none",
-            e["liveness"]["value"], "%s: %s [model-judgment]" % (e["posting_level"]["value"], e["posting_level"]["note"]) if e["posting_level"]["value"] else "not checked (no posting text)",
+            e["liveness"]["value"], e["liveness"]["source"], "%s: %s [model-judgment]" % (e["posting_level"]["value"], e["posting_level"]["note"]) if e["posting_level"]["value"] else "not checked (no posting text)",
             e["timeline"]["value"], fd_txt,
             "${:,.0f}".format(h1b) if h1b else "missing", "${:,.0f}".format(bls_w) if bls_w else "missing (no BLS row)"))
     o += ["", "## Held: a human must look these up", ""]
@@ -481,6 +610,17 @@ def render_report(log):
         o.append("None.")
     for e in held:
         o.append("- **%s · %s**: %s" % (e["company"]["value"], e["title"]["value"], e["held"]))
+    o += ["", "## Try these instead", "",
+          "For each role that is not a clean Apply: other companies in the same city, not already in this run, whose sponsorship record shows a "
+          "software title the keyword rule classifies as non-senior, ranked by approvals. Names and counts are records; "
+          "the entry-level class is model-judgment; none of this says a role is open now.", ""]
+    alt_rows = [e for e in ev + held if e.get("alternatives", {}).get("value")]
+    if not alt_rows:
+        o.append("None this run.")
+    for e in alt_rows:
+        o.append("- **%s** (%s): %s" % (e["company"]["value"], e.get("scorer", {}).get("recommendation", "Held"),
+                 "; ".join("%s (%d approvals)" % (a["company"], a["total_approvals"]) for a in e["alternatives"]["value"])))
+    o += ["", "Network targets with a suggested first question: `network-targets.md` (%d this run)." % len(log["network_targets"])]
     o += ["", "## What this run did not verify", "",
           "- Whether a company sponsors *new grads today*: the CSV gives the top five sponsored titles with no year and no count per title.",
           "- Whether a title is entry-level: a keyword rule decides, and it is labeled model-judgment.",
@@ -546,7 +686,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--sample", action="store_true",
                     help="offline sample run: fixture persona, roles and liveness; run date 2026-10-01; "
-                         "output to course/2026fa/submissions/pavithra-prasad/runs/sample")
+                         "output to the gitignored out/sample folder beside this script")
     ap.add_argument("--census", action="store_true", help="print the senior-only share across the whole CSV (both rules) and exit")
     ap.add_argument("--title-eval", action="store_true", help="score both seniority rules against fixtures/title-labels.csv and exit")
     ap.add_argument("--persona")
@@ -575,7 +715,7 @@ def main(argv=None):
         a.liveness_fixture = a.liveness_fixture or os.path.join(fx, "liveness.json")
         a.run_date = a.run_date or "2026-10-01"
         a.greenhouse_fixture_dir = a.greenhouse_fixture_dir or os.path.join(fx, "greenhouse")
-        a.out_dir = a.out_dir or os.path.join(REPO, ALLOWED_OUT[1], "runs", "sample")
+        a.out_dir = a.out_dir or os.path.join(HERE, "out", "sample")
     if not (a.persona and a.roles and a.out_dir):
         ap.error("--persona, --roles and --out-dir are required unless --census")
     try:
@@ -588,11 +728,19 @@ def main(argv=None):
     recs = [e["scorer"]["recommendation"] for e in log["evaluated"]]
     print("✓ %d roles → Apply %d · Consider %d · Skip %d · Held %d" % (
         c["input"], recs.count("Apply"), recs.count("Consider"), recs.count("Skip"), c["held"]))
+    def try_instead(e):
+        alts = e.get("alternatives", {}).get("value")
+        if alts:
+            print("  %-9s %-28s try instead: %s" % ("", "", ", ".join(a["company"] for a in alts)))
     for e in log["evaluated"]:
         print("  %-9s %-28s %s" % (e["scorer"]["recommendation"], e["company"]["value"], e["next_action"]))
+        try_instead(e)
     for e in log["held"]:
         print("  %-9s %-28s %s" % ("HELD", e["company"]["value"], e["held"]))
-    written = [f for f in ("run-log.json", "report.md", "roles.json", "role-scores.json", "role-scores.md")
+        try_instead(e)
+    if log["network_targets"]:
+        print("  network targets: %s" % ", ".join(t["company"] for t in log["network_targets"]))
+    written = [f for f in ("run-log.json", "report.md", "network-targets.md", "roles.json", "role-scores.json", "role-scores.md")
                if os.path.exists(os.path.join(REPO, log["out_dir"], f))]
     print("  outputs: %s/{%s}" % (log["out_dir"], ", ".join(written)))
     if not log["evaluated"]:

@@ -1,10 +1,11 @@
 {
-  "_note": "FICTIONAL persona whose OPT unemployment window has already closed (failure case F5).",
+  "_note": "FICTIONAL persona already on OPT who has used all 90 unemployment days (failure case F5).",
   "name": "Test Persona (fictional)",
   "email": "test.persona@example.com",
   "authorization": "F-1 OPT; needs sponsorship",
   "opt_ead_start": "2026-01-05",
   "unemployment_ceiling_days": 90,
+  "unemployment_days_used": 90,
   "buffer_days": 20,
   "default_hiring_lag_days": 60
 }

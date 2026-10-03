@@ -2,11 +2,11 @@
 
 ## Executive summary
 
-This report checks 1 software job postings for a new graduate on OPT who will need visa sponsorship. It asks whether each company has a record of sponsoring entry-level software engineers, whether the posting is still open, and whether hiring can finish before the OPT unemployment deadline (2027-04-15, from the student's own dates).
+This report checks 1 software job postings for a new graduate on OPT who will need visa sponsorship. It asks whether the company's top five recorded sponsored titles include a software title that the keyword rule classifies as non-senior, whether the posting is still open, and whether hiring can finish before the student runs out of OPT unemployment days (2027-04-15, from the student's own dates, assuming no work in between; any work moves this date later).
 
 **Result:** Apply 0 · Consider 0 · Skip 0 · Held for a human 1. 1 of 1 were skipped or held.
 
-Labels: **record** = read from a repo data file; **model-judgment** = inferred by a rule in this script; **your-input** = supplied by the student, unchecked.
+Labels: **record** = read from a named repository data file or returned by a named live checker/API; **model-judgment** = inferred by a rule in this script; **your-input** = supplied by the student, unchecked.
 
 ## Decisions
 
@@ -16,6 +16,14 @@ Labels: **record** = read from a repo data file; **model-judgment** = inferred b
 ## Held: a human must look these up
 
 - **Pintrest Inc · Software Engineer**: G-sponsorship: no row in the sponsorship CSV after name normalisation; absence of a row is not evidence of non-sponsorship
+
+## Try these instead
+
+For each role that is not a clean Apply: other companies in the same city, not already in this run, whose sponsorship record shows a software title the keyword rule classifies as non-senior, ranked by approvals. Names and counts are records; the entry-level class is model-judgment; none of this says a role is open now.
+
+None this run.
+
+Network targets with a suggested first question: `network-targets.md` (0 this run).
 
 ## What this run did not verify
 

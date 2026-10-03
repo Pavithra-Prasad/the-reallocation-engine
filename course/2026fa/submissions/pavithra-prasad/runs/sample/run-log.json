@@ -17,7 +17,8 @@
   "liveness_mode": "fixture:scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/liveness.json",
   "opt_unemployment_deadline": {
     "value": "2027-04-15",
-    "source": "your-input"
+    "source": "your-input",
+    "note": "assumes continuous unemployment from 2027-01-15 (later of EAD start 2027-01-15 and run date 2026-10-01); 0 of 90 days already used, 90 remain; working part of that time moves the date later"
   },
   "counts": {
     "input": 10,
@@ -117,13 +118,13 @@
       },
       "liveness": {
         "value": "active",
-        "source": "record",
+        "source": "your-input",
         "note": "fixture:scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/liveness.json; active; Greenhouse API HTTP 200 agrees"
       },
       "greenhouse_api": {
         "value": 200,
-        "source": "record",
-        "note": "fixture"
+        "source": "your-input",
+        "note": "fixture (invented test data)"
       },
       "posting_level": {
         "value": "entry",
@@ -237,13 +238,13 @@
       },
       "liveness": {
         "value": "active",
-        "source": "record",
+        "source": "your-input",
         "note": "fixture:scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/liveness.json; active; Greenhouse API HTTP 200 agrees"
       },
       "greenhouse_api": {
         "value": 200,
-        "source": "record",
-        "note": "fixture"
+        "source": "your-input",
+        "note": "fixture (invented test data)"
       },
       "posting_level": {
         "value": "entry",
@@ -274,7 +275,36 @@
         "reason": "above threshold (0.415) but one soft spot: sponsorship tier \"Possible\"",
         "arithmetic": "(0.5\u00b70.35 + 0.8\u00b70.3) \u00d7 1 \u00d7 1 = 0.415"
       },
-      "next_action": "network first: ask whether they sponsor new grads before tailoring"
+      "next_action": "network first: ask whether they sponsor new grads before tailoring",
+      "alternatives": {
+        "value": [
+          {
+            "company": "DOCUSIGN INC",
+            "total_approvals": 1082.0,
+            "entry_level_swe_titles": [
+              "Software Engineer",
+              "Software Engineer"
+            ]
+          },
+          {
+            "company": "MAPLEBEAR INC",
+            "total_approvals": 498.0,
+            "entry_level_swe_titles": [
+              "Software Engineer"
+            ]
+          },
+          {
+            "company": "DROPBOX INC",
+            "total_approvals": 430.0,
+            "entry_level_swe_titles": [
+              "Software Engineer",
+              "Software Engineer"
+            ]
+          }
+        ],
+        "source": "model-judgment",
+        "note": "same city as the matched row (SAN FRANCISCO, CA); entry-level-swe class by the keyword rule; ranked by approvals; companies already in this run are left out; names and counts are records; says nothing about current openings"
+      }
     },
     {
       "role_id": "databricks-newgrad",
@@ -376,13 +406,13 @@
       },
       "liveness": {
         "value": "expired",
-        "source": "record",
+        "source": "your-input",
         "note": "fixture:scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/liveness.json; HTTP 404; Greenhouse API HTTP 404 agrees"
       },
       "greenhouse_api": {
         "value": 404,
-        "source": "record",
-        "note": "fixture"
+        "source": "your-input",
+        "note": "fixture (invented test data)"
       },
       "posting_level": {
         "value": null,
@@ -413,7 +443,36 @@
         "reason": "gated: liveness \u2248 0.000 (a closed gate zeroes the composite regardless of votes)",
         "arithmetic": "(0.9\u00b70.35 + 0.7\u00b70.3) \u00d7 0 \u00d7 1 = 0.000"
       },
-      "next_action": "network, don't apply: strong new-grad sponsor but posting closed"
+      "next_action": "network, don't apply: strong new-grad sponsor but posting closed",
+      "alternatives": {
+        "value": [
+          {
+            "company": "DOCUSIGN INC",
+            "total_approvals": 1082.0,
+            "entry_level_swe_titles": [
+              "Software Engineer",
+              "Software Engineer"
+            ]
+          },
+          {
+            "company": "MAPLEBEAR INC",
+            "total_approvals": 498.0,
+            "entry_level_swe_titles": [
+              "Software Engineer"
+            ]
+          },
+          {
+            "company": "DROPBOX INC",
+            "total_approvals": 430.0,
+            "entry_level_swe_titles": [
+              "Software Engineer",
+              "Software Engineer"
+            ]
+          }
+        ],
+        "source": "model-judgment",
+        "note": "same city as the matched row (SAN FRANCISCO, CA); entry-level-swe class by the keyword rule; ranked by approvals; companies already in this run are left out; names and counts are records; says nothing about current openings"
+      }
     },
     {
       "role_id": "smartsheet-swe",
@@ -505,13 +564,13 @@
       },
       "liveness": {
         "value": "active",
-        "source": "record",
+        "source": "your-input",
         "note": "fixture:scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/liveness.json; active; Greenhouse API HTTP 200 agrees"
       },
       "greenhouse_api": {
         "value": 200,
-        "source": "record",
-        "note": "fixture"
+        "source": "your-input",
+        "note": "fixture (invented test data)"
       },
       "posting_level": {
         "value": "entry",
@@ -542,7 +601,27 @@
         "reason": "gated: timeline \u2248 0.000 (a closed gate zeroes the composite regardless of votes)",
         "arithmetic": "(0.9\u00b70.35 + 0.7\u00b70.3) \u00d7 1 \u00d7 0 = 0.000"
       },
-      "next_action": "skip"
+      "next_action": "skip",
+      "alternatives": {
+        "value": [
+          {
+            "company": "ZIPSTORM INC",
+            "total_approvals": 18.0,
+            "entry_level_swe_titles": [
+              "Software Engineer I"
+            ]
+          },
+          {
+            "company": "PETABYTE TECHNOLOGY INC",
+            "total_approvals": 12.0,
+            "entry_level_swe_titles": [
+              "Software Engineer II"
+            ]
+          }
+        ],
+        "source": "model-judgment",
+        "note": "same city as the matched row (BELLEVUE, WA); entry-level-swe class by the keyword rule; ranked by approvals; companies already in this run are left out; names and counts are records; says nothing about current openings"
+      }
     },
     {
       "role_id": "airbnb-fullstack",
@@ -623,13 +702,13 @@
       },
       "liveness": {
         "value": "active",
-        "source": "record",
+        "source": "your-input",
         "note": "fixture:scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/liveness.json; active; Greenhouse API HTTP 200 agrees"
       },
       "greenhouse_api": {
         "value": 200,
-        "source": "record",
-        "note": "fixture"
+        "source": "your-input",
+        "note": "fixture (invented test data)"
       },
       "posting_level": {
         "value": "senior",
@@ -755,13 +834,13 @@
       },
       "liveness": {
         "value": "active",
-        "source": "record",
+        "source": "your-input",
         "note": "fixture:scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/liveness.json; saved result: uncertain; Greenhouse API HTTP 200"
       },
       "greenhouse_api": {
         "value": 200,
-        "source": "record",
-        "note": "fixture"
+        "source": "your-input",
+        "note": "fixture (invented test data)"
       },
       "posting_level": {
         "value": "entry",
@@ -836,13 +915,13 @@
       },
       "liveness": {
         "value": "active",
-        "source": "record",
+        "source": "your-input",
         "note": "fixture:scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/liveness.json; no reason"
       },
       "greenhouse_api": {
         "value": null,
-        "source": "record",
-        "note": "fixture"
+        "source": "your-input",
+        "note": "fixture (invented test data)"
       },
       "posting_level": {
         "value": null,
@@ -850,7 +929,12 @@
         "note": "no posting text (no Greenhouse id, or API did not return 200)"
       },
       "held": "G-sponsorship: row exists but Total Approvals is blank or 0; this can mean the sponsoring entity has a different legal name",
-      "next_action": "manual lookup before any effort"
+      "next_action": "manual lookup before any effort",
+      "alternatives": {
+        "value": [],
+        "source": "model-judgment",
+        "note": "no single matched row, so no city to search"
+      }
     },
     {
       "role_id": "google-swe",
@@ -891,13 +975,13 @@
       },
       "liveness": {
         "value": "active",
-        "source": "record",
+        "source": "your-input",
         "note": "fixture:scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/liveness.json; no reason"
       },
       "greenhouse_api": {
         "value": null,
-        "source": "record",
-        "note": "fixture"
+        "source": "your-input",
+        "note": "fixture (invented test data)"
       },
       "posting_level": {
         "value": null,
@@ -905,7 +989,12 @@
         "note": "no posting text (no Greenhouse id, or API did not return 200)"
       },
       "held": "G-sponsorship: no row in the sponsorship CSV after name normalisation; absence of a row is not evidence of non-sponsorship",
-      "next_action": "manual lookup before any effort"
+      "next_action": "manual lookup before any effort",
+      "alternatives": {
+        "value": [],
+        "source": "model-judgment",
+        "note": "no single matched row, so no city to search"
+      }
     },
     {
       "role_id": "peloton-fullstack",
@@ -946,13 +1035,13 @@
       },
       "liveness": {
         "value": "active",
-        "source": "record",
+        "source": "your-input",
         "note": "fixture:scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/liveness.json; no reason"
       },
       "greenhouse_api": {
         "value": null,
-        "source": "record",
-        "note": "fixture"
+        "source": "your-input",
+        "note": "fixture (invented test data)"
       },
       "posting_level": {
         "value": null,
@@ -960,7 +1049,12 @@
         "note": "no posting text (no Greenhouse id, or API did not return 200)"
       },
       "held": "G-sponsorship: 2 rows match: PELOTON INTERACTIVE INC, PELOTON INTERACTIVE LLC; the script will not pick one",
-      "next_action": "manual lookup before any effort"
+      "next_action": "manual lookup before any effort",
+      "alternatives": {
+        "value": [],
+        "source": "model-judgment",
+        "note": "no single matched row, so no city to search"
+      }
     },
     {
       "role_id": "twilio-conflict",
@@ -1054,13 +1148,13 @@
       },
       "liveness": {
         "value": "uncertain",
-        "source": "record",
+        "source": "your-input",
         "note": "fixture:scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/fixtures/liveness.json; page checker said active but Greenhouse API HTTP 404"
       },
       "greenhouse_api": {
         "value": 404,
-        "source": "record",
-        "note": "fixture"
+        "source": "your-input",
+        "note": "fixture (invented test data)"
       },
       "posting_level": {
         "value": null,
@@ -1068,7 +1162,62 @@
         "note": "no posting text (no Greenhouse id, or API did not return 200)"
       },
       "held": "G1 liveness: uncertain (page checker said active but Greenhouse API HTTP 404); a human must open the posting",
-      "next_action": "manual lookup before any effort"
+      "next_action": "manual lookup before any effort",
+      "alternatives": {
+        "value": [
+          {
+            "company": "DOCUSIGN INC",
+            "total_approvals": 1082.0,
+            "entry_level_swe_titles": [
+              "Software Engineer",
+              "Software Engineer"
+            ]
+          },
+          {
+            "company": "MAPLEBEAR INC",
+            "total_approvals": 498.0,
+            "entry_level_swe_titles": [
+              "Software Engineer"
+            ]
+          },
+          {
+            "company": "DROPBOX INC",
+            "total_approvals": 430.0,
+            "entry_level_swe_titles": [
+              "Software Engineer",
+              "Software Engineer"
+            ]
+          }
+        ],
+        "source": "model-judgment",
+        "note": "same city as the matched row (SAN FRANCISCO, CA); entry-level-swe class by the keyword rule; ranked by approvals; companies already in this run are left out; names and counts are records; says nothing about current openings"
+      }
+    }
+  ],
+  "network_targets": [
+    {
+      "company": "Chime Financial Inc",
+      "title": "Software Engineer, Backend (New Grad)",
+      "why": "network first: ask whether they sponsor new grads before tailoring",
+      "ask": "Does your team hire new grads on OPT, and has the company sponsored H-1B for entry-level engineers?",
+      "approvals": 580.0,
+      "sponsored_titles": [
+        "Senior Software Engineer"
+      ]
+    },
+    {
+      "company": "Databricks, Inc.",
+      "title": "Software Engineer, New Grad",
+      "why": "network, don't apply: strong new-grad sponsor but posting closed",
+      "ask": "When does the team next hire new grads, and could we talk about the role before it opens?",
+      "approvals": 1640.0,
+      "sponsored_titles": [
+        "Software Engineer",
+        "Senior Software Engineer",
+        "Solutions Architect",
+        "Specialist Solutions Architect",
+        "Senior Solutions Engineer"
+      ]
     }
   ]
 }

@@ -7,8 +7,18 @@
   "authorization": "F-1 student; post-completion OPT after graduation; needs H-1B sponsorship later",
   "opt_ead_start": "2027-01-15",
   "unemployment_ceiling_days": 90,
+  "unemployment_days_used": 0,
   "buffer_days": 20,
   "default_hiring_lag_days": 60,
-  "target_roles": ["Software Engineer", "Backend Developer", "Full-Stack Engineer"],
-  "target_metros": ["Boston, MA", "New York, NY", "San Francisco / San Jose, CA", "Seattle, WA"]
+  "target_roles": [
+    "Software Engineer",
+    "Backend Developer",
+    "Full-Stack Engineer"
+  ],
+  "target_metros": [
+    "Boston, MA",
+    "New York, NY",
+    "San Francisco / San Jose, CA",
+    "Seattle, WA"
+  ]
 }

@@ -10,7 +10,7 @@ promoted_to: null
 
 ## Executive summary
 
-**What this is.** A small program for an international student finishing a master's degree, about to start OPT, and applying for entry-level software engineering jobs. For each job it checks, from the repository's own data, whether the company has a record of sponsoring *entry-level* software engineers (not only senior ones), whether the posting is still open (cross-checked with the job board's own API where possible), whether the posting itself asks for more experience than a new grad has, and whether hiring can finish before the student's OPT unemployment deadline. It then asks the repository's existing scorer for Apply / Consider / Skip and suggests a next step.
+**What this is.** A small program for an international student finishing a master's degree, about to start OPT, and applying for entry-level software engineering jobs. For each job it checks, from the repository's own data, whether the company's top five recorded sponsored titles include a software title that a keyword rule classifies as non-senior (evidence about new-grad sponsorship, not proof of it), whether the posting is still open (cross-checked with the job board's own API where possible), whether the posting itself asks for more experience than a new grad has, and whether hiring can finish before the student would use up their OPT unemployment days (assuming no work in between). It then asks the repository's existing scorer for Apply / Consider / Skip and suggests a next step. For jobs that aren't a clean Apply it suggests up to three same-city companies with entry-level sponsorship records ("try these instead"), and it writes a list of companies to network into, with a suggested first question.
 
 **Why read it.** It tells you the one command to run, what the output means, and what the program cannot check.
 
@@ -26,12 +26,13 @@ From the **repo root** (running from a subfolder fails with "No such file"):
 python3 scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/sponsor_check.py --sample
 ```
 
-Writes to `course/2026fa/submissions/pavithra-prasad/runs/sample/`:
+Writes to `out/sample/` in this folder (gitignored, because the scorer stamps today's date and every run would otherwise change a tracked file). The committed record of the sample run is `course/2026fa/submissions/pavithra-prasad/runs/sample/`, made with `--sample --out-dir course/2026fa/submissions/pavithra-prasad/runs/sample`. Files:
 
 | File | Reader | What |
 |---|---|---|
 | `report.md` | the person | decisions, next actions, held roles, what was not verified |
 | `run-log.json` | the agent | every input and value with its label, gate results, held roles |
+| `network-targets.md` | the person | companies to network into instead of applying, each with a suggested first question |
 | `roles.json` | the scorer | the input this program built for `scripts/score/role-scorer.mjs` |
 | `role-scores.json`, `role-scores.md` | both | the scorer's own output and per-term audit trace |
 
@@ -58,7 +59,7 @@ python3 scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/sponsor
 python3 scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/test_sponsor_check.py
 ```
 
-25 tests. No network: liveness is read from `fixtures/liveness.json` and Greenhouse answers from `fixtures/greenhouse/` (both invented). The scorer is the repo's own `role-scorer.mjs`, run locally with `node`. Tested on Python 3.9.6 and 3.13.
+32 tests. No network: liveness is read from `fixtures/liveness.json` and Greenhouse answers from `fixtures/greenhouse/` (both invented, so both are labeled your-input in the output, never record). The scorer is the repo's own `role-scorer.mjs`, run locally with `node`. Python versions tested: see `course/2026fa/submissions/pavithra-prasad/TEST-REPORT.md`.
 
 ## How it decides
 
@@ -68,11 +69,13 @@ python3 scripts/contrib/2026fa/pavithra-prasad-newgrad-swe-sponsor-check/test_sp
 | No row, blank approvals, or more than one matching row → **held**, not scored | rule | — |
 | Split the top sponsored titles into SWE / senior (`SWE_RE`, `SENIOR_RE` v1; v0 kept for comparison) | keyword rule | model-judgment |
 | Evidence class → sponsorship term (`SPONSOR_MAP`): entry-level 0.9 Proven; entry-level with < 10 approvals 0.6 Likely; senior-only 0.5 Possible; no SWE title 0.3 Possible | design choice | model-judgment |
-| Posting liveness: `scripts/ats/check-liveness.mjs`, or a saved fixture. Only HTTP 404/410 counts as expired; "expired" from a content heuristic → uncertain | ATS check | record |
-| Greenhouse API (`boards-api.greenhouse.io`) when the role has `greenhouse: {board, job_id}`: 200/404 resolves an uncertain page check; a conflict → held | job-board API | record |
+| Posting liveness: `scripts/ats/check-liveness.mjs`, or a saved fixture. Only HTTP 404/410 counts as expired; "expired" from a content heuristic → uncertain | ATS check | record live; model-judgment when this script reclassifies; your-input from a fixture |
+| Greenhouse API (`boards-api.greenhouse.io`) when the role has `greenhouse: {board, job_id}`: 200/404 resolves an uncertain page check; a conflict → held | job-board API | record live; your-input from a fixture |
 | Posting level from the posting text: new-grad phrases, "N+ years experience" → entry / mid / senior / unclear. Changes the next action, not the score | phrase rule | model-judgment |
-| Timeline: start ≈ max(run date + hiring lag, OPT EAD start); 0 if after EAD start + 90 days, 0.5 inside the buffer, else 1 | persona file | your-input |
+| Timeline: start ≈ max(run date + hiring lag, OPT EAD start); deadline = max(EAD start, run date) + (90 − days already used), **assuming continuous unemployment** from then (the 90 days are accumulated, not a calendar date); 0 if start is after the deadline, 0.5 inside the buffer, else 1 | persona file | your-input |
 | Fit | self-rated in the roles file; no model is called | your-input |
+| "Try these instead": same-city (CSV `city`/`state`) companies, not already in the run, in the `entry-level-swe` class, ranked by approvals, up to 3, for every non-Apply role with a matched row | CSV + keyword rule | model-judgment (names and counts are records) |
+| Network targets: scored roles whose next action starts with "network", with a fixed template question | rule | not evidence; `network-targets.md` |
 | Form D funding: `data/sec/form-d/processed/sample/*.sample.json` | sample files | record (report only) |
 | National wage, `data/bls/compact/soc_occupation_compact.csv`, vs the CSV's H-1B median salary | BLS / CSV | record (report only; role quality has weight 0 in the scorer) |
 
