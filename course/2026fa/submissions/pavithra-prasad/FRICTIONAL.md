@@ -16,7 +16,7 @@ This is the honest record of building the new-grad software-engineer sponsor che
 | 2 | `npm run ats:scan -- --dry-run` | a scan | `portals.yml not found`; worked with `REALLOCATION_ENGINE_PORTALS=data/ats/portals.example.yml` | AI |
 | 3 | `npm install` | no repo changes | modified tracked `package-lock.json`; reverted so it stays out of the PR | AI |
 | 4 | I ran `sponsor_check.py --sample` myself | output | `[Errno 2] No such file or directory`; I was inside `course/…/pavithra-prasad`. Worked after `cd` to repo root | me |
-| 5 | Same run on my Python 3.13 (the AI used 3.9.6) | same result | same result, 17/17 tests passed; reran the 25-test version on 3.13 on 2026-10-02: 25/25 OK; the final 29-test version: see `TEST-REPORT.md` | me |
+| 5 | Same run on my Python 3.13 (the AI used 3.9.6) | same result | same result, 17/17 tests passed; reran the 25-test version on 3.13 on 2026-10-02: 25/25 OK; the final 32-test version: see `TEST-REPORT.md` | me |
 | 6 | First live run on real postings | Pinterest new-grad role scored | both Pinterest postings **Skipped as "expired"**; the Greenhouse API said HTTP 200 (open) | AI ran; found by comparing with the API |
 | 7 | Held-out title test: I labeled 30 titles before seeing the rule | some disagreement | 26/28 agreement; 2 "maybe" excluded | me (labels), AI (eval) |
 | 8 | Break attempt: misspelled "Pintrest Inc" | held | held, but the output **listed files that were never written** | AI found while reviewing the output |

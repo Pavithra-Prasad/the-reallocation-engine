@@ -14,7 +14,7 @@
 
 Full outputs are kept outside the repo in `Prompt eng/reallocation-notes/` (the working-tree scanner output contains an email address from `package-lock.json`, which would be flagged again if saved here).
 
-| Check | Before (fresh fork, 2026-09-30, commit `015843d`) | After (final commit `ed9eacd`, 2026-10-03) |
+| Check | Before (fresh fork, 2026-09-30, commit `015843d`) | After (final code commit `ed9eacd`, 2026-10-03) |
 |---|---|---|
 | `npm run doctor` | `environment: ✓ runnable`, exit 0 | `environment: ✓ runnable`, exit 0 |
 | `npm run verify` | **exit 1**: `ModuleNotFoundError: No module named 'yaml'` → `✗ manifest check FAILED (1 error)`. Conformance itself passed (158 files). | exit 0: `conformance: 174 files … ✓ all conform`, `✓ manifest check passed (3 warnings)` |
